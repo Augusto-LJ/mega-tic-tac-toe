@@ -38,7 +38,7 @@ class pequenoTabuleiro():
         self.__vencedor = novoVencedor
         
     #Armazena a configuração do jogo.
-    __configuracaoDoTabuleiro = [["A", "B", "C"], ["D", "E", "F"],["G", "H", "I"]]
+    __configuracaoDoTabuleiro = [[" ", " ", " "], [" ", " ", " "],[" ", " ", " "]]
         
     #Método getter do atributo "configuracao".
     @property
@@ -53,16 +53,14 @@ class pequenoTabuleiro():
     #Este método imprime a configuraçao atual do jogo da velha 3x3.
     def imprimirConfiguracaoDoJogo (self):
         #Imprime a primeira linha do tabuleiro.
-        print("\n\t-------------")
-        print("\t| {} | {} | {} |".format(self.__configuracaoDoTabuleiro[0][0], self.__configuracaoDoTabuleiro[0][1], self.__configuracaoDoTabuleiro[0][2]))
-        print('\t|------------')
+        print("\t {} | {} | {} ".format(self.__configuracaoDoTabuleiro[0][0], self.__configuracaoDoTabuleiro[0][1], self.__configuracaoDoTabuleiro[0][2]))
+        print('\t---+---+---')
         #Imprime a segunda linha do tabuleiro.
-        print("\t| {} | {} | {} |".format(self.__configuracaoDoTabuleiro[1][0], self.__configuracaoDoTabuleiro[1][1], self.__configuracaoDoTabuleiro[1][2]))
-        print('\t|------------')
+        print("\t {} | {} | {} ".format(self.__configuracaoDoTabuleiro[1][0], self.__configuracaoDoTabuleiro[1][1], self.__configuracaoDoTabuleiro[1][2]))
+        print('\t---+---+---')
         #Imprime a terceira linha do tabuleiro.
-        print("\t| {} | {} | {} |".format(self.__configuracaoDoTabuleiro[2][0], self.__configuracaoDoTabuleiro[2][1], self.__configuracaoDoTabuleiro[2][2]))
-        print('\t*-----------*')
-    
+        print("\t {} | {} | {} ".format(self.__configuracaoDoTabuleiro[2][0], self.__configuracaoDoTabuleiro[2][1], self.__configuracaoDoTabuleiro[2][2]))
+        
     
     #Verifica se na instância desta classe a posição (linhaDaJogada, colunaDaJogada) está vazia.
     #Retorna True caso a posição esteja vazia e a jogada for feita e False caso contrário.
