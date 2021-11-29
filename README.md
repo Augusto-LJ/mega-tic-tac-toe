@@ -5,11 +5,11 @@ O objetivo é fazer um 'Mega Jogo-da-velha' usando programação orientada a obj
 > Status: Em desenvolvimento
 
 ## Desenvolvedores:
-- Nome: Gilvane da Silva Souza - NUSP: 10258726
-
 - Nome: Alxélio Ribeiro Esteves - NUSP: 11796980
 
 - Nome: Augusto Lima Jardim - NUSP: 11810918
+
+- Nome: Gilvane da Silva Souza - NUSP: 10258726
 ## Tecnologias utilizadas:
  Tecnologia   | Versão
 :----------:  | :--------:
