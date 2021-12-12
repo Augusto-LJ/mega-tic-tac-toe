@@ -1,7 +1,8 @@
-"""
-Esta classe representa um tabuleiro 3x3 do jogo da velha.
-"""
-class pequenoTabuleiro():
+
+class microTabuleiro():
+    """
+    Esta classe representa um tabuleiro 3x3 do jogo da velha.
+    """
     #Armazena a quantidade de linhas.
     __linhas = 3
     #Método getter do atributo "linhas".
@@ -177,6 +178,7 @@ class pequenoTabuleiro():
                 return False
         #Retorna 1 caso contrário.
         return True
+    
 """Seguindo o padrão Orientado a Objetos abaixo seguem alguns testes."""    
 teste = pequenoTabuleiro ()
 teste.imprimirConfiguracaoDoJogo()
