@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 class microTabuleiro():
     """
     Esta classe representa um tabuleiro 3x3 do jogo da velha.
@@ -178,10 +178,6 @@ class microTabuleiro():
                 return False
         #Retorna 1 caso contrário.
         return True
-    
-"""Seguindo o padrão Orientado a Objetos abaixo seguem alguns testes."""    
-teste = pequenoTabuleiro ()
-teste.imprimirConfiguracaoDoJogo()
 
     
 
