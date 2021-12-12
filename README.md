@@ -15,6 +15,7 @@ O objetivo é fazer um 'Mega Jogo-da-velha' usando programação orientada a obj
 :----------:  | :--------:
 Python        | 3.*
 pytest        | 6.2.4
+git           | 2.23.0
 
 
 ## Descrição:
