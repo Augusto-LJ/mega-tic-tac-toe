@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 class microTabuleiro():
     """
-    Esta classe representa um tabuleiro 3x3 do jogo da velha.
+    Esta classe representa um micro tabuleiro do Mega-jogo-da-velha.
     """
+    '''
     #Armazena a quantidade de linhas.
     __linhas = 3
     #Método getter do atributo "linhas".
@@ -25,6 +26,14 @@ class microTabuleiro():
     @colunasDoTabuleiro.setter
     def colunasDoTabuleiro (self, novaQuantidadeDeColunas):
         self.__colunas = novaQuantidadeDeColunas
+    '''
+    
+    def __init__(self, pos_linha, pos_coluna):
+        ''' (int, int) -> None
+        Método construtor da classe microTabuleiro
+        '''
+        self.pos_lin = pos_linha
+        self.pos_col = pos_coluna
     
     #Armazena o caractere que representa o vencedor de uma instância desta classe.
     __vencedor = ""
@@ -60,26 +69,23 @@ class microTabuleiro():
         print("\t {} | {} | {} ".format(self.__configuracaoDoTabuleiro[1][0], self.__configuracaoDoTabuleiro[1][1], self.__configuracaoDoTabuleiro[1][2]))
         print('\t---+---+---')
         #Imprime a terceira linha do tabuleiro.
-        print("\t {} | {} | {} ".format(self.__configuracaoDoTabuleiro[2][0], self.__configuracaoDoTabuleiro[2][1], self.__configuracaoDoTabuleiro[2][2]))
-        
+        print("\t {} | {} | {} \n".format(self.__configuracaoDoTabuleiro[2][0], self.__configuracaoDoTabuleiro[2][1], self.__configuracaoDoTabuleiro[2][2]))
+        print(f"   Tabuleiro[{self.pos_lin}][{self.pos_col}]")
     
     #Verifica se na instância desta classe a posição (linhaDaJogada, colunaDaJogada) está vazia.
     #Retorna True caso a posição esteja vazia e a jogada for feita e False caso contrário.
     def verificaPosicaoVazia (self, linhaDaJogada, colunaDaJogada, simboloDoJogador):
-        if self.colunasDoTabuleiroGetter[linhaDaJogada][colunaDaJogada] == "":
+        if self.colunasDoTabuleiroGetter[linhaDaJogada][colunaDaJogada] == " ":
             self.__configuracaoDoTabuleiro[linhaDaJogada][colunaDaJogada] = simboloDoJogador
             return True
-        else:
-    
-            return False
+        return False
     #Verifica se a diagonal principal possúi apenas um símbolo identificador (X ou O)
     #Retorna True caso haja somente um tipo de símbolo e False caso contrário.
     def verificarDiagonalPrincipal (self, simboloDoJogador):
         valoresDiagonalPrincipal = [self.__configuracaoDoTabuleiro[0][0], self.__configuracaoDoTabuleiro[1][1], self.__configuracaoDoTabuleiro[2][2]]
         for i in range (len (valoresDiagonalPrincipal)):
             if valoresDiagonalPrincipal[i] != simboloDoJogador:
-                return False
-        
+                return False      
         return True
     
     #Mesma função que "verificarDiagonalPrincipal", mas agora para a diagonal secundária.
@@ -178,7 +184,40 @@ class microTabuleiro():
                 return False
         #Retorna 1 caso contrário.
         return True
-
+    
+class Jogador:
+    '''
+    Representação mais básica de um tipo de jogador
+    '''
+    def __init__(self, numeroDoJogador):
+        self.numeroDoJogador = numeroDoJogador
+        self.vezDeJogar = False
+        
+        
+class JogadorHumano(Jogador):
+    '''
+    Classe que repesenta um jogador do tipo "humano".
+    Esse tipo de jogador é controlado por um humano e digita as jogados no teclado do computador.
+    '''
+    def faz_jogada():
+        qualMicroTabuleiro = int(input("Em qual tabuleiro você quer jogar?"))
+        qualLinha = int(input("Qual linha?"))
+        qualColuna = int(input("Qual coluna?"))
+        
+    
+    
+class JogadorEstabanado(Jogador):
+    '''
+    Classe que representa um jogador do tipo "estabanado".
+    Esse tipo de jogador é controlado pelo computador e sempre joga numa posição aleatória do tabuleiro.
+    '''
+    
+    
+    
+class JogadorComeCru(Jogador):
+    '''Classe que representa um jogador do tipo "come-crú".
+    Esse tipo de jogador é controlado pelo computador e sempre joga na primeira posição livre do tabuleiro.
+    '''
     
 
 
