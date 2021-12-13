@@ -14,7 +14,7 @@ O objetivo é fazer um 'Mega Jogo-da-velha' usando programação orientada a obj
  Tecnologia   | Versão
 :----------:  | :--------:
 Python        | 3.*
-pytest        | 6.2.4
+pytest        | 6.2.5
 git           | 2.23.0
 
 
