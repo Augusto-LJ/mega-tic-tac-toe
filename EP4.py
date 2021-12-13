@@ -30,7 +30,9 @@ class microTabuleiro():
     
     def __init__(self, pos_linha, pos_coluna):
         ''' (int, int) -> None
-        Método construtor da classe microTabuleiro
+        Método construtor da classe microTabuleiro.
+        RECEBE os inteiros pos_linha e pos_coluna que representam a posição [pos_linha][pos_coluna]
+        do micro-tabuleiro no macro-tabuleiro       
         '''
         self.pos_lin = pos_linha
         self.pos_col = pos_coluna

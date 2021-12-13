@@ -25,8 +25,9 @@ git           | 2.23.0
 2) Jogador estabanado: sempre joga numa posição aleatória do tabuleiro;
 3) Jogador come-crú: sempre escolhe a primeira posição livre do tabuleiro;
 
-## Como rodar o programa:
+## Funcionamento e como rodar o programa:
 &nbsp;&nbsp;Quando o jogo se inicia, o programa pergunta qual será o tipo do 1º jogador e qual será o tipo do 2º jogador. Por exemplo, deve ser possível ter um jogo entre 2 humanos ou entre dois jogadores automatizados ou qualquer outra combinação possível.
+&nbsp;&nbsp;No jogo há um macro-tabuleiro de jogo-da-velha e cada 'espaço' nesse tabuleiro é um micro-tabuleiro de jogo-da-velha. Para saber em qual tabuleiro você está jogando, é válido pensar como se o tabuleiro fosse uma matriz, então o tabuleiro do canto superior esquerdo é o tabuleiro de posição [0][0], o da direita é [0][1] e assim por diante.
 
 
 
