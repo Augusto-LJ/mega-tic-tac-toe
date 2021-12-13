@@ -2,9 +2,15 @@
 import pytest
 from EP4 import *
 
-class TestaMicroTabuleiro:
-    
-    # Testa se cada posição do tabuleiro foi iniciada como sendo vazia
+'''
+@pytest.fixture
+def tabuleiroVazio():
+    t = microTabuleiro()
+    return t
+'''
+
+class TestaMicroTabuleiro: 
+    # Testa se cada posição do tabuleiro foi iniciada vazia
     def test_tabuleiro_vazio_pos00(self):
         t = microTabuleiro()
         assert t.configuracaoDoTabuleiro[0][0] == " "
@@ -32,4 +38,5 @@ class TestaMicroTabuleiro:
     def test_tabuleiro_vazio_pos22(self):
         t = microTabuleiro()
         assert t.configuracaoDoTabuleiro[2][2] == " "
+    
         
