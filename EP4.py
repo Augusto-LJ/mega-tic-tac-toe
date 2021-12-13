@@ -202,9 +202,9 @@ class JogadorHumano(Jogador):
     Esse tipo de jogador é controlado por um humano e digita as jogados no teclado do computador.
     '''
     def faz_jogada():
-        qualMicroTabuleiro = int(input("Em qual tabuleiro você quer jogar?"))
-        qualLinha = int(input("Qual linha?"))
-        qualColuna = int(input("Qual coluna?"))
+        qualMicroTabuleiro = input("Em qual tabuleiro você quer jogar?")
+        qualLinha, qualColuna = int(input("Qual é a sua jogada?")
+        
         
     
     
@@ -223,3 +223,5 @@ class JogadorComeCru(Jogador):
     
 
 
+## fazer a função 'imprima(x, y)' para imprimir o tabuleiro de posição x,y 
+## fazer a função 'imprimaMacro() para imprimir o macro tabuleiro
