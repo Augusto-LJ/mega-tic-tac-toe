@@ -192,9 +192,13 @@ class Jogador:
     Representação mais básica de um tipo de jogador
     '''
     def __init__(self, numeroDoJogador):
-        self.numeroDoJogador = numeroDoJogador
-        self.vezDeJogar = False
-        
+        if numeroDoJogador == 1:
+            self.simboloDoJogador = "X"
+            self.vezDeJogar = True
+        else:
+            self.simboloDoJogador = "O"
+            self.vezDeJogar = False
+            
         
 class JogadorHumano(Jogador):
     '''
@@ -207,21 +211,66 @@ class JogadorHumano(Jogador):
         
         
     
-    
-class JogadorEstabanado(Jogador):
-    '''
-    Classe que representa um jogador do tipo "estabanado".
-    Esse tipo de jogador é controlado pelo computador e sempre joga numa posição aleatória do tabuleiro.
-    '''
-    
-    
-    
-class JogadorComeCru(Jogador):
-    '''Classe que representa um jogador do tipo "come-crú".
-    Esse tipo de jogador é controlado pelo computador e sempre joga na primeira posição livre do tabuleiro.
-    '''
-    
 
+#class JogadorEstabanado(Jogador):
+ #   '''
+  #  Classe que representa um jogador do tipo "estabanado".
+   # Esse tipo de jogador é controlado pelo computador e sempre joga numa posição aleatória do tabuleiro.
+    #'''
+    #def faz_jogada():
+     #   pass
+    
+    
+    
+    
+#class JogadorComeCru(Jogador):
+ #   '''Classe que representa um jogador do tipo "come-crú".
+  #  Esse tipo de jogador é controlado pelo computador e sempre joga na primeira posição livre do tabuleiro.
+   # '''
+       
+
+
+
+def explica_jogadores():
+    '''(None) --> None
+    Essa função serve exclusivamente para descrever o comportamento de cada jogador
+    '''
+    print("\nJogador humano: digita as jogadas no teclado do computador.")
+    print("Jogador estabanado: sempre joga numa posição aleatória do tabuleiro.")
+    print("Jogador come-crú: sempre escolhe a primeira posição livre do tabuleiro.")
+    return
 
 ## fazer a função 'imprima(x, y)' para imprimir o tabuleiro de posição x,y 
 ## fazer a função 'imprimaMacro() para imprimir o macro tabuleiro
+
+## ========================================================================================================== ##
+
+def main():
+    print("Bem-vindo(a) ao Mega Jogo da Velha!\n")
+    print("Abaixo estão listados os tipos de jogadores:")
+    print("1. Jogador humano\n2. Jogador estabanado\n3. Jogador come-crú")
+    
+    escolheu_jogadores = False
+    
+    # enquanto o usuário não escolher os jogadores, não sai do loop
+    while not escolheu_jogadores:
+        comando = int(input("Se você quiser escolher os jogadores, digite '0'. Se quiser ler a descrição dos jogadores, digite '1': "))
+        #escolhe os jogadores
+        if comando == 0: 
+            jogador_um = input("Escolha o tipo do Jogador 1 (X): ")
+            jogador_dois = input("Escolha o tipo do Jogador 2 (O): ")
+            escolheu_jogadores = True
+        # chama a função que explica cada jogador
+        elif comando == 1:
+            explica_jogadores()
+        else:
+            print("\nComando inválido!")
+            
+    # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
+    
+
+
+
+# Para chamar a função main automaticamente
+if __name__ == '__main__':
+    main()
