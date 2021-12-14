@@ -1,83 +1,36 @@
 # -*- coding: utf-8 -*-
-class microTabuleiro():
+class Tabuleiro():
     """
-    Esta classe representa um micro tabuleiro do Mega-jogo-da-velha.
-    """
-    '''
-    #Armazena a quantidade de linhas.
-    __linhas = 3
-    #Método getter do atributo "linhas".
-    @property
-    def linhasDoTabuleiro (self):
-        return self.__linhas
-    
-    #Métoodo setter do atributo "linhas".
-    @linhasDoTabuleiro.setter
-    def linhasDoTabuleiro (self, novaQuantidadeDeLinhas):
-        self.__linhas = novaQuantidadeDeLinhas     
-        
-    #Armazena a quantidade de colunas.
-    __colunas = 3
-    #Método getter do atributo "colunas".
-    @property
-    def colunasDoTabuleiro (self):
-        return self.__colunas
-    #Métoodo setter do atributo "colunas".
-    @colunasDoTabuleiro.setter
-    def colunasDoTabuleiro (self, novaQuantidadeDeColunas):
-        self.__colunas = novaQuantidadeDeColunas
-    '''
+    Esta classe representa um tabuleiro do Mega-jogo-da-velha.
+    """   
     
     def __init__(self, pos_linha, pos_coluna, tipo="micro"):
         ''' (int, int) -> None
-        Método construtor da classe microTabuleiro.
+        Método construtor da classe Tabuleiro.
         RECEBE os inteiros pos_linha e pos_coluna que representam a posição [pos_linha][pos_coluna]
-        do micro-tabuleiro no macro-tabuleiro       
+        do micro-tabuleiro no macro-tabuleiro e um str 'tipo', que indica se é um micro-tabuleiro ou macro-tabuleiro.
         '''
         self.pos_lin = pos_linha
         self.pos_col = pos_coluna
-        #para saber se é micro ou macro
+        # para saber se é micro ou macro
         if tipo == "macro":
             self.eh_macro = True
         else:
             self.eh_macro = False
+        self.configuracaoDoTabuleiro = [[" ", " ", " "], [" ", " ", " "],[" ", " ", " "]]
+        self.jogoAcabou = False
         
-    
-    #Armazena o caractere que representa o vencedor de uma instância desta classe.
-    __vencedor = ""
-    #Método getter do atributo "vencedor".
-    @property
-    def vencedorDoJogo (self):
-        return self.__vencedor
-    
-    #Métoodo setter do atributo "vencedor".
-    @vencedorDoJogo.setter
-    def vencedorDoJogo (self, novoVencedor):
-        self.__vencedor = novoVencedor
-        
-    #Armazena a configuração do jogo.
-    __configuracaoDoTabuleiro = [[" ", " ", " "], [" ", " ", " "],[" ", " ", " "]]
-        
-    #Método getter do atributo "configuracao".
-    @property
-    def configuracaoDoTabuleiro (self):
-        return self.__configuracaoDoTabuleiro
-    
-    #Métoodo setter do atributo "configuracao".
-    @configuracaoDoTabuleiro.setter
-    def configruacaoDoTabuleiro (self, novaConfiguracao):
-        self.__configuracaoDoTabuleiro.copy(novaConfiguracao) 
 
     #Este método imprime a configuraçao atual do jogo da velha 3x3.
     def imprimirConfiguracaoDoJogo (self):
         #Imprime a primeira linha do tabuleiro.
-        print("\n\t {} | {} | {} ".format(self.__configuracaoDoTabuleiro[0][0], self.__configuracaoDoTabuleiro[0][1], self.__configuracaoDoTabuleiro[0][2]))
+        print("\n\t {} | {} | {} ".format(self.configuracaoDoTabuleiro[0][0], self.configuracaoDoTabuleiro[0][1], self.configuracaoDoTabuleiro[0][2]))
         print('\t---+---+---')
         #Imprime a segunda linha do tabuleiro.
-        print("\t {} | {} | {} ".format(self.__configuracaoDoTabuleiro[1][0], self.__configuracaoDoTabuleiro[1][1], self.__configuracaoDoTabuleiro[1][2]))
+        print("\t {} | {} | {} ".format(self.configuracaoDoTabuleiro[1][0], self.configuracaoDoTabuleiro[1][1], self.configuracaoDoTabuleiro[1][2]))
         print('\t---+---+---')
         #Imprime a terceira linha do tabuleiro.
-        print("\t {} | {} | {} \n".format(self.__configuracaoDoTabuleiro[2][0], self.__configuracaoDoTabuleiro[2][1], self.__configuracaoDoTabuleiro[2][2]))
+        print("\t {} | {} | {} \n".format(self.configuracaoDoTabuleiro[2][0], self.configuracaoDoTabuleiro[2][1], self.configuracaoDoTabuleiro[2][2]))
         
         #Checa se é macro-tabuleiro ou micro-tabuleiro
         if self.eh_macro:
@@ -280,6 +233,7 @@ def main():
             print("\nComando inválido!")
             
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
+    #macro =
     
 
 
