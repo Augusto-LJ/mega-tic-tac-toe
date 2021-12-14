@@ -28,7 +28,7 @@ class microTabuleiro():
         self.__colunas = novaQuantidadeDeColunas
     '''
     
-    def __init__(self, pos_linha, pos_coluna):
+    def __init__(self, pos_linha, pos_coluna, tipo="micro"):
         ''' (int, int) -> None
         Método construtor da classe microTabuleiro.
         RECEBE os inteiros pos_linha e pos_coluna que representam a posição [pos_linha][pos_coluna]
@@ -36,6 +36,12 @@ class microTabuleiro():
         '''
         self.pos_lin = pos_linha
         self.pos_col = pos_coluna
+        #para saber se é micro ou macro
+        if tipo == "macro":
+            self.eh_macro = True
+        else:
+            self.eh_macro = False
+        
     
     #Armazena o caractere que representa o vencedor de uma instância desta classe.
     __vencedor = ""
@@ -65,15 +71,21 @@ class microTabuleiro():
     #Este método imprime a configuraçao atual do jogo da velha 3x3.
     def imprimirConfiguracaoDoJogo (self):
         #Imprime a primeira linha do tabuleiro.
-        print("\t {} | {} | {} ".format(self.__configuracaoDoTabuleiro[0][0], self.__configuracaoDoTabuleiro[0][1], self.__configuracaoDoTabuleiro[0][2]))
+        print("\n\t {} | {} | {} ".format(self.__configuracaoDoTabuleiro[0][0], self.__configuracaoDoTabuleiro[0][1], self.__configuracaoDoTabuleiro[0][2]))
         print('\t---+---+---')
         #Imprime a segunda linha do tabuleiro.
         print("\t {} | {} | {} ".format(self.__configuracaoDoTabuleiro[1][0], self.__configuracaoDoTabuleiro[1][1], self.__configuracaoDoTabuleiro[1][2]))
         print('\t---+---+---')
         #Imprime a terceira linha do tabuleiro.
         print("\t {} | {} | {} \n".format(self.__configuracaoDoTabuleiro[2][0], self.__configuracaoDoTabuleiro[2][1], self.__configuracaoDoTabuleiro[2][2]))
-        print(f"   Tabuleiro[{self.pos_lin}][{self.pos_col}]")
-    
+        
+        #Checa se é macro-tabuleiro ou micro-tabuleiro
+        if self.eh_macro:
+            print(f"   Macro-Tabuleiro")
+        else:
+            print(f"Micro-Tabuleiro[{self.pos_lin}][{self.pos_col}]")
+        
+        
     #Verifica se na instância desta classe a posição (linhaDaJogada, colunaDaJogada) está vazia.
     #Retorna True caso a posição esteja vazia e a jogada for feita e False caso contrário.
     def verificaPosicaoVazia (self, linhaDaJogada, colunaDaJogada, simboloDoJogador):
@@ -207,7 +219,8 @@ class JogadorHumano(Jogador):
     '''
     def faz_jogada():
         qualMicroTabuleiro = input("Em qual tabuleiro você quer jogar?")
-        qualLinha, qualColuna = int(input("Qual é a sua jogada?")
+        qualLinha, qualColuna = int(input("Qual é a sua jogada?"))
+                                    
         
         
     
@@ -272,5 +285,5 @@ def main():
 
 
 # Para chamar a função main automaticamente
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+ #   main()
