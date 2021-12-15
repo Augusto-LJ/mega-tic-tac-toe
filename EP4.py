@@ -16,37 +16,34 @@ class Usuario():
         '''
         # Indica se a pessoa já escolheu os jogadores ou não
         escolheu_jogadores = False
+        # Variáveis que serão retornadas no final
+        escolha_do_jogador_um = None
+        escolha_do_jogador_dois = None      
+        # Lista com as possíveis escolhas que um usuário pode fazer
+        possiveis_escolhas = [1,2,3]
         
         # enquanto o usuário não escolher os jogadores, não sai do loop
         while not escolheu_jogadores:
-            comando = int(input("Se você quiser escolher os jogadores, digite '0'. Se quiser ler a descrição dos jogadores, digite '1': "))
-            #escolhe os jogadores
-            if comando == 0: 
-                jogador_um = input("Escolha o tipo do Jogador 1 (X): ")
-                jogador_dois = input("Escolha o tipo do Jogador 2 (O): ")
+            # escolhe o jogador 1
+            while escolha_do_jogador_um not in possiveis_escolhas:
+                escolha_do_jogador_um = int(input("Escolha o tipo do Jogador 1 (X): "))
+                if escolha_do_jogador_um not in possiveis_escolhas:
+                    print("Comando inválido!")
+            # escolhe o jogador 2
+            while escolha_do_jogador_dois not in possiveis_escolhas:        
+                escolha_do_jogador_dois = int(input("Escolha o tipo do Jogador 2 (O): "))
+                if escolha_do_jogador_dois not in possiveis_escolhas:
+                    print("Comando inválido!")
                 escolheu_jogadores = True
-            # chama a função que explica cada jogador
-            elif comando == 1:
-                self.explica_jogadores()
-            else:
-                print("\nComando inválido!")
-        return jogador_um, jogador_dois
+        return escolha_do_jogador_um, escolha_do_jogador_dois
     
-    def explica_jogadores(self):
-        '''(Usuario) --> None
-        Essa função serve para descrever o comportamento de cada jogador
-        '''
-        print("\nJogador humano: digita as jogadas no teclado do computador.")
-        print("Jogador estabanado: sempre joga numa posição aleatória do tabuleiro.")
-        print("Jogador come-crú: sempre escolhe a primeira posição livre do tabuleiro.")
-        return
-    
-    def cria_jogadores(self, tipoDoJogador):
-        
-        return
-    
-    
-
+    def cria_jogador(self, tipoDoJogador, numeroDoJogador):
+        if tipoDoJogador == 1:
+            return JogadorHumano(numeroDoJogador)
+        elif tipoDoJogador == 2:
+            return JogadorEstabanado(numeroDoJogador)
+        else:
+            return JogadorComeCru(numeroDoJogador)
 
 class Tabuleiro():
     """
@@ -200,6 +197,7 @@ class Tabuleiro():
 class microTabuleiro(Tabuleiro):
     '''
     Essa classe representa um micro-tabuleiro do Mega-Jogo-da-Velha.
+    Herda métodos da classe 'Tabuleiro'.
     '''
     def __init__(self, pos_linha, pos_coluna):
         ''' (microTabuleiro, int, int) -> None
@@ -218,14 +216,12 @@ class microTabuleiro(Tabuleiro):
 class macroTabuleiro(Tabuleiro):
     '''
     Essa classe representa um macro-tabuleiro do Mega-Jogo-da-Velha.
+    Herda métodos da classe 'Tabuleiro'.
     '''
     def __init__(self):
         # para herdar
         Tabuleiro.__init__(self)
         self.eh_macro = True
-    
-        
-        
     
 
 class Jogador:
@@ -254,39 +250,33 @@ class JogadorHumano(Jogador):
         
     
 
-#class JogadorEstabanado(Jogador):
- #   '''
-  #  Classe que representa um jogador do tipo "estabanado".
-   # Esse tipo de jogador é controlado pelo computador e sempre joga numa posição aleatória do tabuleiro.
-    #'''
-    #def fazJogada():
-     #   pass
+class JogadorEstabanado(Jogador):
+    '''
+    Classe que representa um jogador do tipo "estabanado".
+    Esse tipo de jogador é controlado pelo computador e sempre joga numa posição aleatória do tabuleiro.
+    '''
+    def fazJogada():
+        pass
     
     
     
     
-#class JogadorComeCru(Jogador):
- #   '''Classe que representa um jogador do tipo "come-crú".
-  #  Esse tipo de jogador é controlado pelo computador e sempre joga na primeira posição livre do tabuleiro.
-   # '''
+class JogadorComeCru(Jogador):
+    '''Classe que representa um jogador do tipo "come-crú".
+    Esse tipo de jogador é controlado pelo computador e sempre joga na primeira posição livre do tabuleiro.
+    '''
+    def fazJogada():
+        pass
        
 
 
-
-
-def cria_jogadores(tipoDoJogador):
-    
-    return
 
 def quem_comeca():
     '''(None) --> None
     Essa função auxiliar serve para decidir de forma pseudoaleatória quem vai começar jogando, utilizando o módulo random.
     '''
-    quem_comeca = random.randrange(1,3)
-    if quem_comeca == 1:
-        jogador_um.vezDeJogar = True
-    else:
-        jogador_dois.vezDeJogar = True
+    return random.randrange(1,3)
+    
         
     
     
@@ -308,27 +298,33 @@ def main():
     usuario = Usuario()
     
     # Escolhe o tipo dos dois jogadores
-    jogador_um, jogador_dois = usuario.escolhe_jogadores()
+    numero_jogador_um, numero_jogador_dois = usuario.escolhe_jogadores()
+    
     
     # Cria os dois jogadores
-    usuario.cria_jogadores()     
+    jogador_um = usuario.cria_jogador(numero_jogador_um, 1)
+    jogador_dois = usuario.cria_jogador(numero_jogador_dois, 2)
     
     # Decide aleatoriamente qual jogador vai começar, sorteando '1' ou '2'
-    quem_comeca()
+    numero_de_quem_comeca = quem_comeca()
+    if numero_de_quem_comeca == 1:
+        jogador_um.vezDeJogar = True
+    else:
+        jogador_dois.vezDeJogar = False
     
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
-    # Macro-tabuleiro:
-    macro_tabuleiro = Tabuleiro(10,10,"macro")
-    # Micro-tabuleiros. Os números contidos no nome representam a posição (no formato (x, y)) no macro-tabuleiro
-    micro_tabuleiro_00 = Tabuleiro(0,0)
-    micro_tabuleiro_01 = Tabuleiro(0,1)
-    micro_tabuleiro_02 = Tabuleiro(0,2)
-    micro_tabuleiro_10 = Tabuleiro(1,0)
-    micro_tabuleiro_11 = Tabuleiro(1,1)
-    micro_tabuleiro_12 = Tabuleiro(1,2)
-    micro_tabuleiro_20 = Tabuleiro(2,0)
-    micro_tabuleiro_21 = Tabuleiro(2,1)
-    micro_tabuleiro_22 = Tabuleiro(2,2)
+        # Macro-tabuleiro:
+    macro_tabuleiro = macroTabuleiro()
+        # Micro-tabuleiros. Os números contidos no nome representam a posição (no formato (x, y)) no macro-tabuleiro
+    micro_tabuleiro_00 = microTabuleiro(0,0)
+    micro_tabuleiro_01 = microTabuleiro(0,1)
+    micro_tabuleiro_02 = microTabuleiro(0,2)
+    micro_tabuleiro_10 = microTabuleiro(1,0)
+    micro_tabuleiro_11 = microTabuleiro(1,1)
+    micro_tabuleiro_12 = microTabuleiro(1,2)
+    micro_tabuleiro_20 = microTabuleiro(2,0)
+    micro_tabuleiro_21 = microTabuleiro(2,1)
+    micro_tabuleiro_22 = microTabuleiro(2,2)
     
     
     
@@ -344,8 +340,7 @@ def main():
     
 
 
-'''
+
 # Para chamar a função main automaticamente
 if __name__ == '__main__':
     main()
-'''
