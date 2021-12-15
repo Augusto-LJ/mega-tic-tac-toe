@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+
+# Importar modulos
+import random
+
+## ================================================================================================================== ##
+
 class Tabuleiro():
     """
     Esta classe representa um tabuleiro do Mega-jogo-da-velha.
@@ -159,10 +165,10 @@ class Jogador:
     def __init__(self, numeroDoJogador):
         if numeroDoJogador == 1:
             self.simboloDoJogador = "X"
-            self.vezDeJogar = True
         else:
             self.simboloDoJogador = "O"
-            self.vezDeJogar = False
+            
+        self.vezDeJogar = False
             
         
 class JogadorHumano(Jogador):
@@ -212,10 +218,14 @@ def explica_jogadores():
 ## ========================================================================================================== ##
 
 def main():
+    ''' 
+    Função principal do programa, inicializa o jogo
+    '''
     print("Bem-vindo(a) ao Mega Jogo da Velha!\n")
     print("Abaixo estão listados os tipos de jogadores:")
     print("1. Jogador humano\n2. Jogador estabanado\n3. Jogador come-crú")
     
+    # flag que indica se a pessoa já escolheu os jogadores ou não
     escolheu_jogadores = False
     
     # enquanto o usuário não escolher os jogadores, não sai do loop
@@ -233,7 +243,34 @@ def main():
             print("\nComando inválido!")
             
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
-    #macro =
+    # Macro-tabuleiro:
+    macro_tabuleiro = Tabuleiro(10,10,"macro")
+    # Micro-tabuleiros. Os números contidos no nome representam a posição (no formato (x, y)) no macro-tabuleiro
+    micro_tabuleiro_00 = Tabuleiro(0,0)
+    micro_tabuleiro_01 = Tabuleiro(0,1)
+    micro_tabuleiro_02 = Tabuleiro(0,2)
+    micro_tabuleiro_10 = Tabuleiro(1,0)
+    micro_tabuleiro_11 = Tabuleiro(1,1)
+    micro_tabuleiro_12 = Tabuleiro(1,2)
+    micro_tabuleiro_20 = Tabuleiro(2,0)
+    micro_tabuleiro_21 = Tabuleiro(2,1)
+    micro_tabuleiro_22 = Tabuleiro(2,2)
+    
+    # Decide aleatoriamente qual jogador vai começar, sorteando '1' ou '2'
+    quem_comeca = random.randrange(1,3)
+    if quem_comeca == 1:
+        jogador_um.vezDeJogar = True
+    else:
+        jogador_dois.vezDeJogar = True
+        
+        
+    
+    # Enquanto ninguém vencer o macro-tabuleiro, não sai do loop
+    while not macro_tabuleiro.jogoAcabou:
+        
+    
+    
+    
     
 
 
