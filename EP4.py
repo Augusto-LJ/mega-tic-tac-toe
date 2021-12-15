@@ -5,6 +5,49 @@ import random
 
 ## ================================================================================================================== ##
 
+class Usuario():
+    '''
+    Esta classe representa o usuário do programa. Cria os jogadores.
+    '''
+    
+    def escolhe_jogadores(self):
+        '''(None) --> None
+        Essa função define o tipo dos 2 jogadores.
+        '''
+        # Indica se a pessoa já escolheu os jogadores ou não
+        escolheu_jogadores = False
+        
+        # enquanto o usuário não escolher os jogadores, não sai do loop
+        while not escolheu_jogadores:
+            comando = int(input("Se você quiser escolher os jogadores, digite '0'. Se quiser ler a descrição dos jogadores, digite '1': "))
+            #escolhe os jogadores
+            if comando == 0: 
+                jogador_um = input("Escolha o tipo do Jogador 1 (X): ")
+                jogador_dois = input("Escolha o tipo do Jogador 2 (O): ")
+                escolheu_jogadores = True
+            # chama a função que explica cada jogador
+            elif comando == 1:
+                self.explica_jogadores()
+            else:
+                print("\nComando inválido!")
+        return jogador_um, jogador_dois
+    
+    def explica_jogadores(self):
+        '''(None) --> None
+        Essa função serve para descrever o comportamento de cada jogador
+        '''
+        print("\nJogador humano: digita as jogadas no teclado do computador.")
+        print("Jogador estabanado: sempre joga numa posição aleatória do tabuleiro.")
+        print("Jogador come-crú: sempre escolhe a primeira posição livre do tabuleiro.")
+        return
+    
+    def cria_jogadores(self, tipoDoJogador):
+        
+        return
+    
+    
+
+
 class Tabuleiro():
     """
     Esta classe representa um tabuleiro do Mega-jogo-da-velha.
@@ -24,7 +67,7 @@ class Tabuleiro():
         else:
             self.eh_macro = False
         self.configuracaoDoTabuleiro = [[" ", " ", " "], [" ", " ", " "],[" ", " ", " "]]
-        self.jogoAcabou = False
+        self.tabuleiroAcabou = False
         
 
     #Este método imprime a configuraçao atual do jogo da velha 3x3.
@@ -176,7 +219,7 @@ class JogadorHumano(Jogador):
     Classe que repesenta um jogador do tipo "humano".
     Esse tipo de jogador é controlado por um humano e digita as jogados no teclado do computador.
     '''
-    def faz_jogada():
+    def fazJogada():
         qualMicroTabuleiro = input("Em qual tabuleiro você quer jogar?")
         qualLinha, qualColuna = int(input("Qual é a sua jogada?"))
                                     
@@ -189,7 +232,7 @@ class JogadorHumano(Jogador):
   #  Classe que representa um jogador do tipo "estabanado".
    # Esse tipo de jogador é controlado pelo computador e sempre joga numa posição aleatória do tabuleiro.
     #'''
-    #def faz_jogada():
+    #def fazJogada():
      #   pass
     
     
@@ -203,14 +246,23 @@ class JogadorHumano(Jogador):
 
 
 
-def explica_jogadores():
-    '''(None) --> None
-    Essa função serve exclusivamente para descrever o comportamento de cada jogador
-    '''
-    print("\nJogador humano: digita as jogadas no teclado do computador.")
-    print("Jogador estabanado: sempre joga numa posição aleatória do tabuleiro.")
-    print("Jogador come-crú: sempre escolhe a primeira posição livre do tabuleiro.")
+
+def cria_jogadores(tipoDoJogador):
+    
     return
+
+def quem_comeca():
+    '''(None) --> None
+    Essa função auxiliar serve para decidir de forma pseudoaleatória quem vai começar jogando, utilizando o módulo random.
+    '''
+    quem_comeca = random.randrange(1,3)
+    if quem_comeca == 1:
+        jogador_um.vezDeJogar = True
+    else:
+        jogador_dois.vezDeJogar = True
+        
+    
+    
 
 ## fazer a função 'imprima(x, y)' para imprimir o tabuleiro de posição x,y 
 ## fazer a função 'imprimaMacro() para imprimir o macro tabuleiro
@@ -219,29 +271,19 @@ def explica_jogadores():
 
 def main():
     ''' 
-    Função principal do programa, inicializa o jogo
+    Função principal do programa, inicializa o jogo.
     '''
     print("Bem-vindo(a) ao Mega Jogo da Velha!\n")
     print("Abaixo estão listados os tipos de jogadores:")
     print("1. Jogador humano\n2. Jogador estabanado\n3. Jogador come-crú")
     
-    # flag que indica se a pessoa já escolheu os jogadores ou não
-    escolheu_jogadores = False
+    # Cria a instância que representa o usuário
+    usuario = Usuario()
+    # Escolhe o tipo dos dois jogadores
+    jogador_um, jogador_dois = usuario.escolhe_jogadores()
+    # Cria os dois jogadores
+    usuario.cria_jogadores()        
     
-    # enquanto o usuário não escolher os jogadores, não sai do loop
-    while not escolheu_jogadores:
-        comando = int(input("Se você quiser escolher os jogadores, digite '0'. Se quiser ler a descrição dos jogadores, digite '1': "))
-        #escolhe os jogadores
-        if comando == 0: 
-            jogador_um = input("Escolha o tipo do Jogador 1 (X): ")
-            jogador_dois = input("Escolha o tipo do Jogador 2 (O): ")
-            escolheu_jogadores = True
-        # chama a função que explica cada jogador
-        elif comando == 1:
-            explica_jogadores()
-        else:
-            print("\nComando inválido!")
-            
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
     # Macro-tabuleiro:
     macro_tabuleiro = Tabuleiro(10,10,"macro")
@@ -257,16 +299,13 @@ def main():
     micro_tabuleiro_22 = Tabuleiro(2,2)
     
     # Decide aleatoriamente qual jogador vai começar, sorteando '1' ou '2'
-    quem_comeca = random.randrange(1,3)
-    if quem_comeca == 1:
-        jogador_um.vezDeJogar = True
-    else:
-        jogador_dois.vezDeJogar = True
-        
-        
+    quem_comeca()
+    
+    
     
     # Enquanto ninguém vencer o macro-tabuleiro, não sai do loop
-    while not macro_tabuleiro.jogoAcabou:
+    while not macro_tabuleiro.tabuleiroAcabou:
+        return
         
     
     
@@ -276,5 +315,5 @@ def main():
 
 
 # Para chamar a função main automaticamente
-#if __name__ == '__main__':
- #   main()
+if __name__ == '__main__':
+    main()

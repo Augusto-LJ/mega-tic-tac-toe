@@ -27,7 +27,7 @@ git           | 2.23.0
 3) Jogador come-crú: sempre escolhe a primeira posição livre do tabuleiro;<br></br>
 
 &nbsp;&nbsp;Para saber em qual tabuleiro você está jogando, é válido pensar como se o tabuleiro fosse uma matriz, então o tabuleiro do canto superior esquerdo é o tabuleiro de posição [0][0], o que está à direita deste é [0][1] e assim por diante.<br></br>
-&nbsp;&nbsp;A cada rodada será disposto um menu com as opções possíveis, sendo elas:
+&nbsp;&nbsp;O programa sorteará (pseudo)aleatoriamente o jogador que  vai começar jogando. A cada rodada será disposto um menu com as opções possíveis, sendo elas:
 1) Imprimir algum micro-tabuleiro (O jogador deverá digitar '1')
 2) Imprimir o macro-tabuleiro (O jogador deverá digitar '2')
 3) Fazer jogada (O jogador deverá apertar a tecla 'Enter')<br></br>
