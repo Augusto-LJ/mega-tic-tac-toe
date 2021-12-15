@@ -33,9 +33,10 @@ git           | 2.23.0
 3) Fazer jogada (O jogador deverá apertar a tecla 'Enter')<br></br>
 
 Se o jogador humano escolher a opção 1, ele deverá, em seguida, digitar a tupla que representa a posição do micro-tabuleiro que ele quer ver (por exemplo '0, 2'); se escolher a opção 2, o macro-tabuleiro será impresso na saída de dados, e se ele apertar a tecla 'Enter', fará a sua jogada digitando uma tupla representando a posição do micro-tabuleiro no macro-tabuleiro e em seguida outra tupla representando a posição onde ele quer fazer a jogada dele no micro-tabuleiro.<br></br>
+&nbsp;&nbsp;Em caso de empate em algum dos micro-tabuleiros, esse micro-tabuleiro é reiniciado, ou seja, ele volta a ser totalmente vazio. No caso de empate no macro-tabuleiro, o jogo simplesmente termina com empate.<br></br>
 &nbsp;&nbsp;O jogo só acaba se acontecer um dos seguintes eventos:
-- Um dos jogadores conseguiu completar uma coluna ou uma linha ou uma diagonal do macro-tabuleiro, ou
-- Não há mais jogadas possíveis (popularmente falando, 'deu zebra')
+- Um dos jogadores conseguiu completar uma coluna ou uma linha ou uma diagonal do macro-tabuleiro;
+- Não há mais espaços livres no macro-tabuleiro e nenhum dos jogadores venceu (popularmente falando, 'deu zebra').
 
 ## Como rodar o programa:
 &nbsp;&nbsp;Quando o jogo se inicia, o programa pergunta qual será o tipo do 1º jogador e qual será o tipo do 2º jogador. Por exemplo, deve ser possível ter um jogo entre 2 humanos ou entre dois jogadores automatizados ou qualquer outra combinação possível.<br></br>
