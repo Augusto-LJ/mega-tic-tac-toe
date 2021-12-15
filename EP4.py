@@ -11,7 +11,7 @@ class Usuario():
     '''
     
     def escolhe_jogadores(self):
-        '''(None) --> None
+        '''(Usuario) --> None
         Essa função define o tipo dos 2 jogadores.
         '''
         # Indica se a pessoa já escolheu os jogadores ou não
@@ -33,7 +33,7 @@ class Usuario():
         return jogador_um, jogador_dois
     
     def explica_jogadores(self):
-        '''(None) --> None
+        '''(Usuario) --> None
         Essa função serve para descrever o comportamento de cada jogador
         '''
         print("\nJogador humano: digita as jogadas no teclado do computador.")
@@ -50,28 +50,24 @@ class Usuario():
 
 class Tabuleiro():
     """
-    Esta classe representa um tabuleiro do Mega-jogo-da-velha.
+    Esta classe representa um tabuleiro qualquer do Mega-jogo-da-velha.
     """   
     
-    def __init__(self, pos_linha, pos_coluna, tipo="micro"):
-        ''' (int, int) -> None
+    def __init__(self):
+        ''' (Tabuleiro) -> None
         Método construtor da classe Tabuleiro.
         RECEBE os inteiros pos_linha e pos_coluna que representam a posição [pos_linha][pos_coluna]
         do micro-tabuleiro no macro-tabuleiro e um str 'tipo', que indica se é um micro-tabuleiro ou macro-tabuleiro.
         '''
-        self.pos_lin = pos_linha
-        self.pos_col = pos_coluna
-        # para saber se é micro ou macro
-        if tipo == "macro":
-            self.eh_macro = True
-        else:
-            self.eh_macro = False
         self.configuracaoDoTabuleiro = [[" ", " ", " "], [" ", " ", " "],[" ", " ", " "]]
         self.tabuleiroAcabou = False
         
 
     #Este método imprime a configuraçao atual do jogo da velha 3x3.
     def imprimirConfiguracaoDoJogo (self):
+        '''
+        Imprime na saída de dados o micro-tabuleiro ou o macro-tabuleiro que chamou a função.
+        '''
         #Imprime a primeira linha do tabuleiro.
         print("\n\t {} | {} | {} ".format(self.configuracaoDoTabuleiro[0][0], self.configuracaoDoTabuleiro[0][1], self.configuracaoDoTabuleiro[0][2]))
         print('\t---+---+---')
@@ -200,7 +196,38 @@ class Tabuleiro():
                 return False
         #Retorna 1 caso contrário.
         return True
+
+class microTabuleiro(Tabuleiro):
+    '''
+    Essa classe representa um micro-tabuleiro do Mega-Jogo-da-Velha.
+    '''
+    def __init__(self, pos_linha, pos_coluna):
+        ''' (microTabuleiro, int, int) -> None
+        Método construtor da classe Tabuleiro.
+        RECEBE os inteiros pos_linha e pos_coluna que representam a posição [pos_linha][pos_coluna]
+        do micro-tabuleiro no macro-tabuleiro.
+        '''
+        # para herdar
+        Tabuleiro.__init__(self)
+        # posição do micro-tabuleiro no macro-tabuleiro
+        self.pos_lin = pos_linha
+        self.pos_col = pos_coluna
+        # para saber se é micro ou macro
+        self.eh_macro = False
+        
+class macroTabuleiro(Tabuleiro):
+    '''
+    Essa classe representa um macro-tabuleiro do Mega-Jogo-da-Velha.
+    '''
+    def __init__(self):
+        # para herdar
+        Tabuleiro.__init__(self)
+        self.eh_macro = True
     
+        
+        
+    
+
 class Jogador:
     '''
     Representação mais básica de um tipo de jogador
@@ -279,10 +306,15 @@ def main():
     
     # Cria a instância que representa o usuário
     usuario = Usuario()
+    
     # Escolhe o tipo dos dois jogadores
     jogador_um, jogador_dois = usuario.escolhe_jogadores()
+    
     # Cria os dois jogadores
-    usuario.cria_jogadores()        
+    usuario.cria_jogadores()     
+    
+    # Decide aleatoriamente qual jogador vai começar, sorteando '1' ou '2'
+    quem_comeca()
     
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
     # Macro-tabuleiro:
@@ -298,8 +330,7 @@ def main():
     micro_tabuleiro_21 = Tabuleiro(2,1)
     micro_tabuleiro_22 = Tabuleiro(2,2)
     
-    # Decide aleatoriamente qual jogador vai começar, sorteando '1' ou '2'
-    quem_comeca()
+    
     
     
     
@@ -313,7 +344,8 @@ def main():
     
 
 
-
+'''
 # Para chamar a função main automaticamente
 if __name__ == '__main__':
     main()
+'''
