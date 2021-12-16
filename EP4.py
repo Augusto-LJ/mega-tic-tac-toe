@@ -7,7 +7,7 @@ import random
 
 class Usuario():
     '''
-    Esta classe representa o usuário do programa. Cria os jogadores.
+    Esta classe representa o usuário do programa. Cria os jogadores e gerencia os tabuleiros.
     '''
     
     def escolhe_jogadores(self):
@@ -235,28 +235,32 @@ class Jogador:
             self.simboloDoJogador = "O"
             
         self.vezDeJogar = False
-            
+        self.tabuleirosDisponiveis = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
         
 class JogadorHumano(Jogador):
     '''
     Classe que repesenta um jogador do tipo "humano".
     Esse tipo de jogador é controlado por um humano e digita as jogados no teclado do computador.
     '''
-    def fazJogada():
+    def escolheJogada(self):
+        # Determina em qual micro-tabuleiro a jogada será feita
         qualMicroTabuleiro = input("Em qual tabuleiro você quer jogar?")
+        # Determina em qual posição do micro-tabuleiro a jogada será feita
         qualLinha, qualColuna = int(input("Qual é a sua jogada?"))
-                                    
-        
-        
-    
+        return qualMicroTabuleiro, qualLinha, qualColuna    
 
 class JogadorEstabanado(Jogador):
     '''
     Classe que representa um jogador do tipo "estabanado".
     Esse tipo de jogador é controlado pelo computador e sempre joga numa posição aleatória do tabuleiro.
     '''
-    def fazJogada():
-        pass
+    def escolheJogada(self):
+        # Define qual micro-tabuleiro, usando o módulo random
+        qualMicroTabuleiro = random.choice(self.tabuleirosDisponiveis)
+        # Define qual lugar do micro-tabuleiro a jogada será feita
+        
+        
+                    
     
     
     
@@ -265,20 +269,9 @@ class JogadorComeCru(Jogador):
     '''Classe que representa um jogador do tipo "come-crú".
     Esse tipo de jogador é controlado pelo computador e sempre joga na primeira posição livre do tabuleiro.
     '''
-    def fazJogada():
+    def escolheJogada(self):
         pass
        
-
-
-
-def quem_comeca():
-    '''(None) --> None
-    Essa função auxiliar serve para decidir de forma pseudoaleatória quem vai começar jogando, utilizando o módulo random.
-    '''
-    return random.randrange(1,3)
-    
-        
-    
     
 
 ## fazer a função 'imprima(x, y)' para imprimir o tabuleiro de posição x,y 
@@ -298,19 +291,18 @@ def main():
     usuario = Usuario()
     
     # Escolhe o tipo dos dois jogadores
-    numero_jogador_um, numero_jogador_dois = usuario.escolhe_jogadores()
-    
+    numero_jogador_um, numero_jogador_dois = usuario.escolhe_jogadores() 
     
     # Cria os dois jogadores
     jogador_um = usuario.cria_jogador(numero_jogador_um, 1)
     jogador_dois = usuario.cria_jogador(numero_jogador_dois, 2)
     
     # Decide aleatoriamente qual jogador vai começar, sorteando '1' ou '2'
-    numero_de_quem_comeca = quem_comeca()
+    numero_de_quem_comeca = random.randrange(1,3)
     if numero_de_quem_comeca == 1:
         jogador_um.vezDeJogar = True
     else:
-        jogador_dois.vezDeJogar = False
+        jogador_dois.vezDeJogar = True
     
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
         # Macro-tabuleiro:
@@ -337,10 +329,13 @@ def main():
     
     
     
-    
+t = microTabuleiro(0,0)
+jog = JogadorEstabanado(1)
+jog.escolheJogada()
 
 
-
+'''
 # Para chamar a função main automaticamente
 if __name__ == '__main__':
     main()
+'''
