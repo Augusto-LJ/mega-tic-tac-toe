@@ -304,15 +304,23 @@ class JogadorEstabanado(Jogador):
     
     
 class JogadorComeCru(Jogador):
-    '''Classe que representa um jogador do tipo "come-crú".
+    '''
+    Classe que representa um jogador do tipo "come-crú".
     Esse tipo de jogador é controlado pelo computador e sempre joga na primeira posição livre do tabuleiro.
     '''
     def escolheMicroTabuleiro(self):
+        '''(JogadorComeCru) --> tuple
+        Esse método retorna o primeiro micro-tabuleiro disponível.
+        '''
         # Define em qual micro-tabuleiro a jogada será feita
         qualMicroTabuleiro = self.microTabuleirosDisponiveis[0]
+        return qualMicroTabuleiro
         
         
     def escolheJogada(self, microTabuleiro):
+        '''(JogadorComeCru, microTabuleiro) --> tuple
+        Esse método retorna o primeiro espaço vazio de um objeto do tipo microTabuleiro.
+        '''
         # Define a posição no micro-tabuleiro onde a jogada será feita
         jogada = microTabuleiro.posicoesVazias[0]
         indiceDaJogada = microTabuleiro.posicoesVazias.index(jogada)
@@ -321,10 +329,6 @@ class JogadorComeCru(Jogador):
         
         return jogada
        
-    
-
-## fazer a função 'imprima(x, y)' para imprimir o tabuleiro de posição x,y 
-## fazer a função 'imprimaMacro() para imprimir o macro tabuleiro
 
 ## ========================================================================================================== ##
 
