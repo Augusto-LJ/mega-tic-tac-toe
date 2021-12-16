@@ -38,6 +38,11 @@ class Usuario():
         return escolha_do_jogador_um, escolha_do_jogador_dois
     
     def cria_jogador(self, tipoDoJogador, numeroDoJogador):
+        '''(Usuario, int, int) --> Jogador
+        Esse método é responsável por criar os jogadores. 
+        RECEBE um objeto Usuario e dois int, que são , respectivamente, o número que representa o
+        tipo de jogador e o número que distingue o Jogador 1 do Jogador 2.
+        '''
         if tipoDoJogador == 1:
             return JogadorHumano(numeroDoJogador)
         elif tipoDoJogador == 2:
@@ -45,7 +50,7 @@ class Usuario():
         else:
             return JogadorComeCru(numeroDoJogador)
 
-class Tabuleiro():
+class Tabuleiro:
     """
     Esta classe representa um tabuleiro qualquer do Mega-jogo-da-velha.
     """   
@@ -58,6 +63,7 @@ class Tabuleiro():
         '''
         self.configuracaoDoTabuleiro = [[" ", " ", " "], [" ", " ", " "],[" ", " ", " "]]
         self.tabuleiroAcabou = False
+        self.posicoesVazias = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
         
 
     #Este método imprime a configuraçao atual do jogo da velha 3x3.
@@ -201,7 +207,7 @@ class microTabuleiro(Tabuleiro):
     '''
     def __init__(self, pos_linha, pos_coluna):
         ''' (microTabuleiro, int, int) -> None
-        Método construtor da classe Tabuleiro.
+        Método construtor da classe microTabuleiro. Herda métodos da classe Tabuleiro.
         RECEBE os inteiros pos_linha e pos_coluna que representam a posição [pos_linha][pos_coluna]
         do micro-tabuleiro no macro-tabuleiro.
         '''
@@ -219,7 +225,10 @@ class macroTabuleiro(Tabuleiro):
     Herda métodos da classe 'Tabuleiro'.
     '''
     def __init__(self):
-        # para herdar
+        '''(macroTabuleiro) --> None
+        Método construtor da classe macroTabuleiro. Herda métodos da classe Tabuleiro.
+        '''
+        # Para herdar
         Tabuleiro.__init__(self)
         self.eh_macro = True
     
@@ -229,13 +238,22 @@ class Jogador:
     Representação mais básica de um tipo de jogador
     '''
     def __init__(self, numeroDoJogador):
+        '''(Jogador, int) --> None
+        Método construtor da classe Jogador.
+        '''
         if numeroDoJogador == 1:
             self.simboloDoJogador = "X"
         else:
             self.simboloDoJogador = "O"
             
         self.vezDeJogar = False
-        self.tabuleirosDisponiveis = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
+        self.microTabuleirosDisponiveis = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
+        
+    def quaisTabuleirosDisponiveis(self):
+        '''(Jogador) --> list
+        Esse método retorna a lista dos tabuleiros que ainda estão disponíveis.
+        '''
+        return self.tabuleirosDisponiveis
         
 class JogadorHumano(Jogador):
     '''
@@ -243,10 +261,19 @@ class JogadorHumano(Jogador):
     Esse tipo de jogador é controlado por um humano e digita as jogados no teclado do computador.
     '''
     def escolheJogada(self):
+        '''(JogadorHumano) --> tuple, int, int
+        Esse método define a jogada que será feita pelo Jogador humano.
+        RETORNA a tupla qualMicroTabuleiro, que indica em qual micro-tabuleiro a jogada será feita, e
+        os inteiros qualLinha e qualColuna que indicam onde a jogada será feito no micro-tabuleiro.
+        '''
         # Determina em qual micro-tabuleiro a jogada será feita
-        qualMicroTabuleiro = input("Em qual tabuleiro você quer jogar?")
+        qualLinhaDoMacro = int(input("Digite qual linha do macro-tabuleiro você quer jogar: "))
+        qualColunaDoMacro = int(input("Digite qual coluna do macro-tabuleiro você quer jogar: "))
+        qualMicroTabuleiro = qualLinhaDoMacro, qualColunaDoMacro
         # Determina em qual posição do micro-tabuleiro a jogada será feita
-        qualLinha, qualColuna = int(input("Qual é a sua jogada?"))
+        qualLinha = int(input("Digite qual linha do micro-tabuleiro você quer jogar: "))
+        qualColuna = int(input("Digite qual colunaa do micro-tabuleiro você quer jogar: "))
+        
         return qualMicroTabuleiro, qualLinha, qualColuna    
 
 class JogadorEstabanado(Jogador):
@@ -254,23 +281,45 @@ class JogadorEstabanado(Jogador):
     Classe que representa um jogador do tipo "estabanado".
     Esse tipo de jogador é controlado pelo computador e sempre joga numa posição aleatória do tabuleiro.
     '''
-    def escolheJogada(self):
-        # Define qual micro-tabuleiro, usando o módulo random
-        qualMicroTabuleiro = random.choice(self.tabuleirosDisponiveis)
-        # Define qual lugar do micro-tabuleiro a jogada será feita
-        
-        
+    def escolheMicroTabuleiro(self):
+        '''(JogadorEstabanado) --> tuple
+        Esse método retorna
+        '''
+        # Define em qual micro-tabuleiro vai jogar usando o módulo random
+        return random.choice(self.microTabuleirosDisponiveis)
+    
+    def escolheJogada(self, microTabuleiro):
+        '''(JogadorEstabanado, microTabuleiro) --> tuple
+        RECEBE um objeto do tipo microTabuleiro
+        RETORNA uma tupla que representa a jogada a ser feita.
+        Além disso, atualiza a lista das posições vazias de um objeto do tipo microTabuleiro.
+        '''
+        # Define a jogada aleatoriamente
+        jogada = random.choice(microTabuleiro.posicoesVazias)
+        indiceDaJogada = microTabuleiro.posicoesVazias.index(jogada)
+        # Tira essa posição da lista das posicoes vazias
+        del microTabuleiro.posicoesVazias[indiceDaJogada]
                     
-    
-    
+        return jogada
     
     
 class JogadorComeCru(Jogador):
     '''Classe que representa um jogador do tipo "come-crú".
     Esse tipo de jogador é controlado pelo computador e sempre joga na primeira posição livre do tabuleiro.
     '''
-    def escolheJogada(self):
-        pass
+    def escolheMicroTabuleiro(self):
+        # Define em qual micro-tabuleiro a jogada será feita
+        qualMicroTabuleiro = self.microTabuleirosDisponiveis[0]
+        
+        
+    def escolheJogada(self, microTabuleiro):
+        # Define a posição no micro-tabuleiro onde a jogada será feita
+        jogada = microTabuleiro.posicoesVazias[0]
+        indiceDaJogada = microTabuleiro.posicoesVazias.index(jogada)
+        # Tira essa posição da lista das posicoes vazias
+        del microTabuleiro.posicoesVazias[indiceDaJogada]
+        
+        return jogada
        
     
 
@@ -305,33 +354,16 @@ def main():
         jogador_dois.vezDeJogar = True
     
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
-        # Macro-tabuleiro:
     macro_tabuleiro = macroTabuleiro()
         # Micro-tabuleiros. Os números contidos no nome representam a posição (no formato (x, y)) no macro-tabuleiro
-    micro_tabuleiro_00 = microTabuleiro(0,0)
-    micro_tabuleiro_01 = microTabuleiro(0,1)
-    micro_tabuleiro_02 = microTabuleiro(0,2)
-    micro_tabuleiro_10 = microTabuleiro(1,0)
-    micro_tabuleiro_11 = microTabuleiro(1,1)
-    micro_tabuleiro_12 = microTabuleiro(1,2)
-    micro_tabuleiro_20 = microTabuleiro(2,0)
-    micro_tabuleiro_21 = microTabuleiro(2,1)
-    micro_tabuleiro_22 = microTabuleiro(2,2)
+    micro_tabuleiro_00,micro_tabuleiro_01,micro_tabuleiro_02=microTabuleiro(0,0),microTabuleiro(0,1),microTabuleiro(0,2)
+    micro_tabuleiro_10,micro_tabuleiro_11,micro_tabuleiro_12=microTabuleiro(1,0),microTabuleiro(1,1),microTabuleiro(1,2)
+    micro_tabuleiro_20,micro_tabuleiro_21,micro_tabuleiro_22=microTabuleiro(2,0),microTabuleiro(2,1),microTabuleiro(2,2)
     
     
-    
-    
-    
-    # Enquanto ninguém vencer o macro-tabuleiro, não sai do loop
-    while not macro_tabuleiro.tabuleiroAcabou:
+    # Enquanto ninguém vencer o macro-tabuleiro ou não tiver mais jogadas possíveis, não sai do loop
+    while not macro_tabuleiro.tabuleiroAcabou or len(macro_tabuleiro.posicoesVazias) > 0:
         return
-        
-    
-    
-    
-t = microTabuleiro(0,0)
-jog = JogadorEstabanado(1)
-jog.escolheJogada()
 
 
 '''
