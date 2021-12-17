@@ -66,7 +66,6 @@ class Tabuleiro:
         self.posicoesVazias = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
         
 
-    #Este método imprime a configuraçao atual do jogo da velha 3x3.
     def imprimirConfiguracaoDoJogo (self):
         '''(Tabuleiro) --> None
         Imprime na saída de dados o micro-tabuleiro ou o macro-tabuleiro que chamou a função.
@@ -78,13 +77,13 @@ class Tabuleiro:
         print("\t {} | {} | {} ".format(self.configuracaoDoTabuleiro[1][0], self.configuracaoDoTabuleiro[1][1], self.configuracaoDoTabuleiro[1][2]))
         print('\t---+---+---')
         #Imprime a terceira linha do tabuleiro.
-        print("\t {} | {} | {} \n".format(self.configuracaoDoTabuleiro[2][0], self.configuracaoDoTabuleiro[2][1], self.configuracaoDoTabuleiro[2][2]))
-        
+        print("\t {} | {} | {} \n".format(self.configuracaoDoTabuleiro[2][0], self.configuracaoDoTabuleiro[2][1], self.configuracaoDoTabuleiro[2][2]))        
         #Checa se é macro-tabuleiro ou micro-tabuleiro
         if self.eh_macro:
             print(f"   Macro-Tabuleiro")
         else:
             print(f"Micro-Tabuleiro[{self.pos_lin}][{self.pos_col}]")
+            
         
     def verificaPosicaoVazia (self, linhaDaJogada, colunaDaJogada):
         '''(Tabuleiro, int, int) --> bool
@@ -93,111 +92,82 @@ class Tabuleiro:
         '''
         return self.configuracaoDoTabuleiro[linhaDaJogada][colunaDaJogada] == " "
     
-    #Verifica se a diagonal principal possúi apenas um símbolo identificador (X ou O)
-    #Retorna True caso haja somente um tipo de símbolo e False caso contrário.
-    def verificarDiagonalPrincipal (self, simboloDoJogador):
-        valoresDiagonalPrincipal = [self.__configuracaoDoTabuleiro[0][0], self.__configuracaoDoTabuleiro[1][1], self.__configuracaoDoTabuleiro[2][2]]
-        for i in range (len (valoresDiagonalPrincipal)):
+    
+    def verificaDiagonalPrincipal (self, simboloDoJogador):
+        '''(Tabuleiro, str) --> bool
+        Retorna True se a diagonal principal possui apenas o símbolo 'simboloDoJogador' e
+        False caso contrário.
+        '''
+        # Armazena os valores que estão na diagonal principal do tabuleiro
+        valoresDiagonalPrincipal = [self.__configuracaoDoTabuleiro[0][0],
+                                    self.__configuracaoDoTabuleiro[1][1],
+                                    self.__configuracaoDoTabuleiro[2][2]]
+        # Percorre toda a lista valoresDiagonalPrincipal
+        for i in range(3):
+            # Caso haja um valor diferente do simbolo do jogador,
             if valoresDiagonalPrincipal[i] != simboloDoJogador:
-                return False      
+                # Retorna False
+                return False   
+        # Se percorrer toda a lista e não tiver nenhum valor diferente, retorna True
         return True
     
-    #Mesma função que "verificarDiagonalPrincipal", mas agora para a diagonal secundária.
-    def verificarDiagonalSecundaria (self, simboloDoJogador):
+    
+    def verificaDiagonalSecundaria (self, simboloDoJogador):
+        '''(Tabuleiro, str) --> bool
+        Retorna True se a diagonal secundária possui apenas o símbolo 'simboloDoJogador' e
+        False caso contrário.
+        '''
         #Armazena os valores que estão na diagonal secundária do tabuleiro.
-        valoresDiagonalSecundaria = [self.__configuracaoDoTabuleiro[0][2], self.__configuracaoDoTabuleiro[1][1], self.__configuracaoDoTabuleiro[2][0]]
-        #Percorre a lista acima.
-        for i in range (len (valoresDiagonalSecundaria)):
-            #Caso haja algum valor diferente do qual o simbolo do jogador pertence.
+        valoresDiagonalSecundaria = [self.__configuracaoDoTabuleiro[0][2],
+                                     self.__configuracaoDoTabuleiro[1][1],
+                                     self.__configuracaoDoTabuleiro[2][0]]
+        # Percorre toda a lista valoresDiagonalSecundaria
+        for i in range(3):
+            # Caso haja um valor diferente do simbolo do jogador,
             if valoresDiagonalSecundaria[i] != simboloDoJogador:
-                #Retorna 0 e sai da função.
+                #Retorna False
                 return False
-        #Retorna 1 caso contrário.
+        # Se percorrer toda a lista e não tiver nenhum valor diferente, retorna True
         return True
     
-    #Verifica se a primeira linha do tabuleiro possui apenas um símbolo identificador (X ou O)
-    #Retorna 1 caso haja somente um tipo de símbolo e 0 caso contrário.
-    def verificarPrimeiraLinha (self, simboloDoJogador):
-        #Armazena os valores contidos na primeira linha do tabuleiro.
-        valoresPrimeiraLinha = [self.__configuracaoDoTabuleiro[0][0], self.__configuracaoDoTabuleiro[0][1], self.__configuracaoDoTabuleiro[0][2]]
-        #Percorre a lista acima e verifica se há um valor diferente do qual equivale o simbolo do jogador passado como parâmetro.
-        for valor in range (len (valoresPrimeiraLinha)):
-            #Caso haja um valor diferente do simbolo do jogador.
-            if valoresPrimeiraLinha[valor] != simboloDoJogador:
-                #Sai da função e retorna 0.
+    
+    def verificaLinha(self, numeroDaLinha, simboloDoJogador):
+        '''(Tabuleiro, int, str) --> bool
+        Retorna True se a linha de numero 'numeroDaLinha' de um objeto do tipo Tabuleiro
+        possui apenas o símbolo 'simboloDoJogador' e False caso contrário.
+        '''
+        # Lista que armazena os valores da linha numeroDaLinha
+        valoresDaLinha = [self.configuracaoDoTabuleiro[numeroDaLinha][0], 
+                          self.configuracaoDoTabuleiro[numeroDaLinha][1], 
+                          self.configuracaoDoTabuleiro[numeroDaLinha][2]]
+        # Varre toda a lista valoresDaLinha
+        for valor in range(3):
+            # Caso haja um valor diferente do simbolo do jogador,
+            if valoresDaLinha[valor] != simboloDoJogador:
+                # Retorna False
                 return False
-        #Retorna 1 caso contrário.
+        # Se percorrer toda a lista e não tiver nenhum valor diferente, retorna True
         return True
     
-    #Verifica se a segunda linha do tabuleiro possui apenas um símbolo identificador (X ou O).
-    #Retorna 1 caso haja somente um tipo de símbolo e 0 caso contrário.
-    def verificarSegundaLinha (self, simboloDoJogador):
-        #Armazena os valores contidos na primeira linha do tabuleiro.
-        valoresSegundaLinha = [self.__configuracaoDoTabuleiro[1][0], self.__configuracaoDoTabuleiro[1][1], self.__configuracaoDoTabuleiro[1][2]]
-        #Percorre a lista acima e verifica se há um valor diferente do qual equivale o simbolo do jogador passado como parâmetro.
-        for valor in range (len (valoresSegundaLinha)):
-            #Caso haja algum valor diferente de simbolo do jogador.
-            if valoresSegundaLinha[valor] != simboloDoJogador:
-                #Sai da função e retorna 0.
+    
+    def verificaColuna(self, numeroDaColuna, simboloDoJogador):
+        '''(Tabuleiro, int, str) --> bool
+        Retorna True se a coluna de numero 'numeroDaColuna' de um objeto do tipo Tabuleiro
+        possui apenas o símbolo 'simboloDoJogador' e False caso contrário.
+        '''
+        # Lista que armazena os valores da coluna numeroDaColuna
+        valoresDaColuna = [self.configuracaoDoTabuleiro[0][numeroDaColuna], 
+                           self.configuracaoDoTabuleiro[1][numeroDaColuna], 
+                           self.configuracaoDoTabuleiro[2][numeroDaColuna]]
+        # Varre toda a lista valoresDaColuna
+        for valor in range(3):
+            # Caso haja um valor diferente do simbolo do jogador,
+            if valoresDaColuna[valor] != simboloDoJogador:
+                # Retorna False
                 return False
-        #Retorna 1 caso contrário.
+        # Se percorrer toda a lista e não tiver nenhum valor diferente, retorna True
         return True
     
-    #Verifica se a terceira linha do tabuleiro possúi apenas um símbolo identificador (X ou O).
-    #Retorna 1 caso haja somente um tipo de símbolo e 0 caso contrário.
-    def verificarTerceiraLinha (self, simboloDoJogador):
-        #Armazena os valores contidos na primeira linha do tabuleiro.
-        valoresTerceiraLinha = [self.__configuracaoDoTabuleiro[2][0], self.__configuracaoDoTabuleiro[2][1], self.__configuracaoDoTabuleiro[2][2]]
-        #Percorre a lista acima e verifica se há um valor diferente do qual equivale o simbolo do jogador passado como parâmetro.
-        for valor in range (len (valoresTerceiraLinha)):
-            #Caso haja algum valor diferente na lista que difira do símbolo do jogador.
-            if valoresTerceiraLinha[valor] != simboloDoJogador:
-                #Sai da função e retorna 0.
-                return False
-        #Retorna 1 caso contrário.
-        return True
-    
-    #Verifica se a primeira coluna do tabuleiro possui apenas um símbolo identificador (X ou O).
-    #Retorna 1 caso haja somente um tipo de símbolo e 0 caso contrário.
-    def verificarPrimeiraColuna (self, simboloDoJogador):
-        #Armazena os valores contidos na primeira coluna do tabuleiro.
-        valoresPrimeiraColuna = [self.__configuracaoDoTabuleiro[0][0], self.__configuracaoDoTabuleiro[0][1], self.__configuracaoDoTabuleiro[0][2]]
-        #Percorre a lista dos valores da primeira coluna.
-        for valor in range (len (valoresPrimeiraColuna)):
-            #Caso haja um valor diferente do símbolo do jogador.
-            if valoresPrimeiraColuna[valor] != simboloDoJogador:
-                #Sai da função e retorna 0.
-                return False
-        #Retorna 1 caso contrário.
-        return True
-    
-    #Verifica se a segunda coluna do tabuleiro possui apenas um símbolo identificador (X ou O).
-    #Retorna 1 caso haja somente um tipo de símbolo e 0 caso contrário.
-    def verificarSegundaColuna (self, simboloDoJogador):
-        #Armazena os valores contidos na segunda coluna do tabuleiro.
-        valoresSegundaColuna = [self.__configuracaoDoTabuleiro[1][0], self.__configuracaoDoTabuleiro[1][1], self.__configuracaoDoTabuleiro[1][2]]
-        #Percorre a lista dos valores da segunda coluna.
-        for valor in range (len (valoresSegundaColuna)):
-            #Caso haja um valor diferente do símbolo do jogador.
-            if valoresSegundaColuna[valor] != simboloDoJogador:
-                #Sai da função e retorna 0.
-                return False
-        #Retorna 1 caso contrário.
-        return True
-
-    #Verifica se a terceira coluna do tabuleiro possui apenas um símbolo identificador (X ou O).
-    #Retorna 1 caso haja somente um tipo de símbolo e 0 caso contrário.
-    def verificarTerceiraColuna (self, simboloDoJogador):
-        #Armazena os valores contidos na terceira coluna do tabuleiro.
-        valoresTerceiraColuna = [self.__configuracaoDoTabuleiro[2][0], self.__configuracaoDoTabuleiro[2][1], self.__configuracaoDoTabuleiro[2][2]]
-        #Percorre a lista dos valores da terceira coluna.
-        for valor in range (len (valoresTerceiraColuna)):
-            #Caso haja um valor diferente do símbolo do jogador.
-            if valoresTerceiraColuna[valor] != simboloDoJogador:
-                #Sai da função e retorna 0.
-                return False
-        #Retorna 1 caso contrário.
-        return True
 
 class microTabuleiro(Tabuleiro):
     '''
@@ -217,6 +187,7 @@ class microTabuleiro(Tabuleiro):
         self.pos_col = pos_coluna
         # para saber se é micro ou macro
         self.eh_macro = False
+        
         
 class macroTabuleiro(Tabuleiro):
     '''
@@ -248,12 +219,14 @@ class Jogador:
         self.vezDeJogar = False
         self.microTabuleirosDisponiveis = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
         
+        
     def quaisTabuleirosDisponiveis(self):
         '''(Jogador) --> list
         Esse método retorna a lista dos tabuleiros que ainda estão disponíveis.
         '''
         return self.tabuleirosDisponiveis
         
+    
 class JogadorHumano(Jogador):
     '''
     Classe que repesenta um jogador do tipo "humano".
@@ -274,6 +247,7 @@ class JogadorHumano(Jogador):
         qualColuna = int(input("Digite qual colunaa do micro-tabuleiro você quer jogar: "))
         
         return qualMicroTabuleiro, qualLinha, qualColuna    
+
 
 class JogadorEstabanado(Jogador):
     '''
@@ -300,6 +274,7 @@ class JogadorEstabanado(Jogador):
         del microTabuleiro.posicoesVazias[indiceDaJogada]
                     
         return jogada
+    
     
     def fazJogada():
         
