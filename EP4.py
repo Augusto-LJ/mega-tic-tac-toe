@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 # Importar modulos
 import random
+import numpy as np
 ## ================================================================================================================== ##
 class Usuario():
     '''
     Esta classe representa o usuário do programa. Cria os jogadores e gerencia os tabuleiros.
-    ''' 
-    def __init__(self):
-        '''(Usuario) --> None
-        Método construtor da classe Usuario.
+    '''     
+        
+    def criaArrayDeTabuleiros(self, listaDeTabuleiros):
+        '''(Usuario, list) --> None
+        Essa função recebe uma lista contendo todos os tabuleiros e cria um array
+        dessa lista usando o módulo numpy
         '''
-        dicionarioDeMicroTabuleiros = {(0,0): "micro00", (0,1): "micro01", (0,2): "micro02",
-                                       (1,0): "micro10", (1,1): "micro11", (1,2): "micro12",
-                                       (2,0): "micro20", (2,1): "micro21", (2,2): "micro22"}
-        self.dicionarioDeMicroTabuleiros = dicionarioDeMicroTabuleiros
+        self.arrayDeTabuleiros = np.array(listaDeTabuleiros)
         
         
     def escolhe_jogadores(self):
@@ -338,23 +338,25 @@ def main():
     
     # Cria a instância que representa o usuário
     usuario = Usuario()
-    
     # Escolhe o tipo dos dois jogadores
     tipo_jogador_um, tipo_jogador_dois = usuario.escolhe_jogadores() 
-    
     # Cria os dois jogadores
     jogador_um = usuario.cria_jogador(tipo_jogador_um, "X")
     jogador_dois = usuario.cria_jogador(tipo_jogador_dois, "O")
-    
     # Decide aleatoriamente qual jogador vai começar
     quemComeca(jogador_um, jogador_dois)
-    
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
     macro_tabuleiro = MacroTabuleiro()
         # Micro-tabuleiros. Os números contidos no nome representam a posição (no formato (x, y)) no macro-tabuleiro
     micro00, micro01, micro02 = MicroTabuleiro(0,0), MicroTabuleiro(0,1), MicroTabuleiro(0,2)
     micro10, micro11, micro12 = MicroTabuleiro(1,0), MicroTabuleiro(1,1), MicroTabuleiro(1,2)
     micro20, micro21, micro22 = MicroTabuleiro(2,0), MicroTabuleiro(2,1), MicroTabuleiro(2,2)
+    # Lista com todos os objetos do tipo MicroTabuleiro
+    listaDeMicroTabuleiros = [[micro00, micro01, micro02], 
+                              [micro10, micro11, micro12], 
+                              [micro20, micro21, micro22]]
+    # Cria array com a lista dos micro-tabuleiros
+    usuario.criaArrayDeTabuleiros(listaDeMicroTabuleiros)
     
     # Enquanto ninguém vencer o macro-tabuleiro ou não tiver mais jogadas possíveis, não sai do loop
     while not macro_tabuleiro.tabuleiroAcabou or len(macro_tabuleiro.posicoesVazias) > 0:
