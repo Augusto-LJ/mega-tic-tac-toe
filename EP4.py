@@ -17,11 +17,9 @@ class Usuario():
         # Indica se a pessoa já escolheu os jogadores ou não
         escolheu_jogadores = False
         # Variáveis que serão retornadas no final
-        escolha_do_jogador_um = None
-        escolha_do_jogador_dois = None      
+        escolha_do_jogador_um = escolha_do_jogador_dois = None
         # Lista com as possíveis escolhas que um usuário pode fazer
-        possiveis_escolhas = [1,2,3]
-        
+        possiveis_escolhas = [1,2,3]  
         # enquanto o usuário não escolher os jogadores, não sai do loop
         while not escolheu_jogadores:
             # escolhe o jogador 1
@@ -37,18 +35,18 @@ class Usuario():
                 escolheu_jogadores = True
         return escolha_do_jogador_um, escolha_do_jogador_dois
     
-    def cria_jogador(self, tipoDoJogador, numeroDoJogador):
-        '''(Usuario, int, int) --> Jogador
+    def cria_jogador(self, tipoDoJogador, simboloDoJogador):
+        '''(Usuario, int, str) --> Jogador
         Esse método é responsável por criar os jogadores. 
-        RECEBE um objeto Usuario e dois int, que são , respectivamente, o número que representa o
-        tipo de jogador e o número que distingue o Jogador 1 do Jogador 2.
+        RECEBE um objeto Usuario, o int tipoDoJogador que representa o tipo de jogador,
+        e um str 'simboloDoJogador' que indica o símbolo que distingue o Jogador 1 do Jogador 2.
         '''
         if tipoDoJogador == 1:
-            return JogadorHumano(numeroDoJogador)
+            return JogadorHumano(simboloDoJogador)
         elif tipoDoJogador == 2:
-            return JogadorEstabanado(numeroDoJogador)
+            return JogadorEstabanado(simboloDoJogador)
         else:
-            return JogadorComeCru(numeroDoJogador)
+            return JogadorComeCru(simboloDoJogador)
 
 class Tabuleiro:
     """
@@ -216,15 +214,11 @@ class Jogador:
     '''
     Representação mais básica de um tipo de jogador
     '''
-    def __init__(self, numeroDoJogador):
+    def __init__(self, simboloDoJogador):
         '''(Jogador, int) --> None
         Método construtor da classe Jogador.
         '''
-        if numeroDoJogador == 1:
-            self.simboloDoJogador = "X"
-        else:
-            self.simboloDoJogador = "O"
-            
+        self.simboloDoJogador = simboloDoJogador            
         self.vezDeJogar = False
         self.microTabuleirosDisponiveis = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
         
@@ -341,11 +335,11 @@ def main():
     usuario = Usuario()
     
     # Escolhe o tipo dos dois jogadores
-    numero_jogador_um, numero_jogador_dois = usuario.escolhe_jogadores() 
+    tipo_jogador_um, tipo_jogador_dois = usuario.escolhe_jogadores() 
     
     # Cria os dois jogadores
-    jogador_um = usuario.cria_jogador(numero_jogador_um, 1)
-    jogador_dois = usuario.cria_jogador(numero_jogador_dois, 2)
+    jogador_um = usuario.cria_jogador(tipo_jogador_um, "X")
+    jogador_dois = usuario.cria_jogador(tipo_jogador_dois, "O")
     
     # Decide aleatoriamente qual jogador vai começar
     quemComeca(jogador_um, jogador_dois)
@@ -357,8 +351,6 @@ def main():
     micro_tabuleiro_10,micro_tabuleiro_11,micro_tabuleiro_12=MicroTabuleiro(1,0),MicroTabuleiro(1,1),MicroTabuleiro(1,2)
     micro_tabuleiro_20,micro_tabuleiro_21,micro_tabuleiro_22=MicroTabuleiro(2,0),MicroTabuleiro(2,1),MicroTabuleiro(2,2)
     
-    print(jogador_um.vezDeJogar)
-    print(jogador_dois.vezDeJogar)
     # Enquanto ninguém vencer o macro-tabuleiro ou não tiver mais jogadas possíveis, não sai do loop
     while not macro_tabuleiro.tabuleiroAcabou or len(macro_tabuleiro.posicoesVazias) > 0:
         return
