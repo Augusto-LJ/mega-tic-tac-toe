@@ -68,7 +68,7 @@ class Tabuleiro:
 
     #Este método imprime a configuraçao atual do jogo da velha 3x3.
     def imprimirConfiguracaoDoJogo (self):
-        '''
+        '''(Tabuleiro) --> None
         Imprime na saída de dados o micro-tabuleiro ou o macro-tabuleiro que chamou a função.
         '''
         #Imprime a primeira linha do tabuleiro.
@@ -86,14 +86,13 @@ class Tabuleiro:
         else:
             print(f"Micro-Tabuleiro[{self.pos_lin}][{self.pos_col}]")
         
-        
-    #Verifica se na instância desta classe a posição (linhaDaJogada, colunaDaJogada) está vazia.
-    #Retorna True caso a posição esteja vazia e a jogada for feita e False caso contrário.
-    def verificaPosicaoVazia (self, linhaDaJogada, colunaDaJogada, simboloDoJogador):
-        if self.colunasDoTabuleiroGetter[linhaDaJogada][colunaDaJogada] == " ":
-            self.__configuracaoDoTabuleiro[linhaDaJogada][colunaDaJogada] = simboloDoJogador
-            return True
-        return False
+    def verificaPosicaoVazia (self, linhaDaJogada, colunaDaJogada):
+        '''(Tabuleiro, int, int) --> bool
+        Verifica se na instância desta classe a posição (linhaDaJogada, colunaDaJogada) está vazia.
+        Retorna 'True' caso a posição esteja vazia e 'False' caso contrário.
+        '''
+        return self.configuracaoDoTabuleiro[linhaDaJogada][colunaDaJogada] == " "
+    
     #Verifica se a diagonal principal possúi apenas um símbolo identificador (X ou O)
     #Retorna True caso haja somente um tipo de símbolo e False caso contrário.
     def verificarDiagonalPrincipal (self, simboloDoJogador):
@@ -288,7 +287,7 @@ class JogadorEstabanado(Jogador):
         # Define em qual micro-tabuleiro vai jogar usando o módulo random
         return random.choice(self.microTabuleirosDisponiveis)
     
-    def escolheJogada(self, microTabuleiro):
+    def escolhePosicaoNoMicro(self, microTabuleiro):
         '''(JogadorEstabanado, microTabuleiro) --> tuple
         RECEBE um objeto do tipo microTabuleiro
         RETORNA uma tupla que representa a jogada a ser feita.
@@ -301,6 +300,10 @@ class JogadorEstabanado(Jogador):
         del microTabuleiro.posicoesVazias[indiceDaJogada]
                     
         return jogada
+    
+    def fazJogada():
+        
+        pass
     
     
 class JogadorComeCru(Jogador):
