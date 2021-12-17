@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
-
 # Importar modulos
 import random
-
 ## ================================================================================================================== ##
-
 class Usuario():
     '''
     Esta classe representa o usuário do programa. Cria os jogadores e gerencia os tabuleiros.
-    '''
-    
+    ''' 
+    def __init__(self):
+        '''(Usuario) --> None
+        Método construtor da classe Usuario.
+        '''
+        dicionarioDeMicroTabuleiros = {(0,0): "micro00", (0,1): "micro01", (0,2): "micro02",
+                                       (1,0): "micro10", (1,1): "micro11", (1,2): "micro12",
+                                       (2,0): "micro20", (2,1): "micro21", (2,2): "micro22"}
+        self.dicionarioDeMicroTabuleiros = dicionarioDeMicroTabuleiros
+        
+        
     def escolhe_jogadores(self):
         '''(Usuario) --> None
         Essa função define o tipo dos 2 jogadores.
@@ -35,6 +41,7 @@ class Usuario():
                 escolheu_jogadores = True
         return escolha_do_jogador_um, escolha_do_jogador_dois
     
+    
     def cria_jogador(self, tipoDoJogador, simboloDoJogador):
         '''(Usuario, int, str) --> Jogador
         Esse método é responsável por criar os jogadores. 
@@ -48,11 +55,11 @@ class Usuario():
         else:
             return JogadorComeCru(simboloDoJogador)
 
+
 class Tabuleiro:
     """
     Esta classe representa um tabuleiro qualquer do Mega-jogo-da-velha.
     """   
-    
     def __init__(self):
         ''' (Tabuleiro) -> None
         Método construtor da classe Tabuleiro.
@@ -68,19 +75,14 @@ class Tabuleiro:
         '''(Tabuleiro) --> None
         Imprime na saída de dados o micro-tabuleiro ou o macro-tabuleiro que chamou a função.
         '''
-        #Imprime a primeira linha do tabuleiro.
-        print("\n\t {} | {} | {} ".format(self.configuracaoDoTabuleiro[0][0], self.configuracaoDoTabuleiro[0][1], self.configuracaoDoTabuleiro[0][2]))
-        print('\t---+---+---')
-        #Imprime a segunda linha do tabuleiro.
-        print("\t {} | {} | {} ".format(self.configuracaoDoTabuleiro[1][0], self.configuracaoDoTabuleiro[1][1], self.configuracaoDoTabuleiro[1][2]))
-        print('\t---+---+---')
-        #Imprime a terceira linha do tabuleiro.
-        print("\t {} | {} | {} \n".format(self.configuracaoDoTabuleiro[2][0], self.configuracaoDoTabuleiro[2][1], self.configuracaoDoTabuleiro[2][2]))        
+        strDoTabuleiro ="\n\t {} | {} | {} \n\t---+---+---\n\t {} | {} | {} \n\t---+---+---\n\t {} | {} | {} \n".format(self.configuracaoDoTabuleiro[0][0],self.configuracaoDoTabuleiro[0][1],self.configuracaoDoTabuleiro[0][2],self.configuracaoDoTabuleiro[1][0],self.configuracaoDoTabuleiro[1][1],self.configuracaoDoTabuleiro[1][2],self.configuracaoDoTabuleiro[2][0],self.configuracaoDoTabuleiro[2][1],self.configuracaoDoTabuleiro[2][2])
         #Checa se é macro-tabuleiro ou micro-tabuleiro
         if self.eh_macro:
-            print(f"   Macro-Tabuleiro")
+            strDoTabuleiro +="\n  Macro-Tabuleiro"
         else:
-            print(f"Micro-Tabuleiro[{self.pos_lin}][{self.pos_col}]")
+            strDoTabuleiro +="\nMicro-Tabuleiro[{}][{}]".format(self.pos_lin, self.pos_col)
+            
+        return strDoTabuleiro
             
         
     def verificaPosicaoVazia (self, linhaDaJogada, colunaDaJogada):
@@ -186,6 +188,8 @@ class MicroTabuleiro(Tabuleiro):
         # para saber se é micro ou macro
         self.eh_macro = False
         
+        
+        
     def reiniciaMicroTabuleiro(self):
         '''(MicroTabuleiro) --> none
         Esse método 'limpa' todas as posições de um micro-tabuleiro que gerou empate
@@ -194,6 +198,8 @@ class MicroTabuleiro(Tabuleiro):
         for linha in range(3):
             for coluna in range(3):
                 self.configuracaoDoTabuleiro[linha][coluna] = " "
+        # Atualizaz a lista de posições vazias desde micro-tabuleiro
+        self.posicoesVazias = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
         
         
 class MacroTabuleiro(Tabuleiro):
@@ -264,6 +270,7 @@ class JogadorEstabanado(Jogador):
         # Define em qual micro-tabuleiro vai jogar usando o módulo random
         return random.choice(self.microTabuleirosDisponiveis)
     
+    
     def escolhePosicaoNoMicro(self, microTabuleiro):
         '''(JogadorEstabanado, microTabuleiro) --> tuple
         RECEBE um objeto do tipo microTabuleiro
@@ -274,8 +281,7 @@ class JogadorEstabanado(Jogador):
         jogada = random.choice(microTabuleiro.posicoesVazias)
         indiceDaJogada = microTabuleiro.posicoesVazias.index(jogada)
         # Tira essa posição da lista das posicoes vazias
-        del microTabuleiro.posicoesVazias[indiceDaJogada]
-                    
+        del microTabuleiro.posicoesVazias[indiceDaJogada]                    
         return jogada
     
     
@@ -306,8 +312,7 @@ class JogadorComeCru(Jogador):
         jogada = microTabuleiro.posicoesVazias[0]
         indiceDaJogada = microTabuleiro.posicoesVazias.index(jogada)
         # Tira essa posição da lista das posicoes vazias
-        del microTabuleiro.posicoesVazias[indiceDaJogada]
-        
+        del microTabuleiro.posicoesVazias[indiceDaJogada]  
         return jogada
        
 
@@ -347,9 +352,9 @@ def main():
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
     macro_tabuleiro = MacroTabuleiro()
         # Micro-tabuleiros. Os números contidos no nome representam a posição (no formato (x, y)) no macro-tabuleiro
-    micro_tabuleiro_00,micro_tabuleiro_01,micro_tabuleiro_02=MicroTabuleiro(0,0),MicroTabuleiro(0,1),MicroTabuleiro(0,2)
-    micro_tabuleiro_10,micro_tabuleiro_11,micro_tabuleiro_12=MicroTabuleiro(1,0),MicroTabuleiro(1,1),MicroTabuleiro(1,2)
-    micro_tabuleiro_20,micro_tabuleiro_21,micro_tabuleiro_22=MicroTabuleiro(2,0),MicroTabuleiro(2,1),MicroTabuleiro(2,2)
+    micro00, micro01, micro02 = MicroTabuleiro(0,0), MicroTabuleiro(0,1), MicroTabuleiro(0,2)
+    micro10, micro11, micro12 = MicroTabuleiro(1,0), MicroTabuleiro(1,1), MicroTabuleiro(1,2)
+    micro20, micro21, micro22 = MicroTabuleiro(2,0), MicroTabuleiro(2,1), MicroTabuleiro(2,2)
     
     # Enquanto ninguém vencer o macro-tabuleiro ou não tiver mais jogadas possíveis, não sai do loop
     while not macro_tabuleiro.tabuleiroAcabou or len(macro_tabuleiro.posicoesVazias) > 0:
