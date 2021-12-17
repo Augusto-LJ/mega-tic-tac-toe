@@ -66,7 +66,7 @@ class Tabuleiro:
         self.posicoesVazias = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
         
 
-    def imprimirConfiguracaoDoJogo (self):
+    def imprimirTabuleiro (self):
         '''(Tabuleiro) --> None
         Imprime na saída de dados o micro-tabuleiro ou o macro-tabuleiro que chamou a função.
         '''
@@ -169,14 +169,14 @@ class Tabuleiro:
         return True
     
 
-class microTabuleiro(Tabuleiro):
+class MicroTabuleiro(Tabuleiro):
     '''
     Essa classe representa um micro-tabuleiro do Mega-Jogo-da-Velha.
     Herda métodos da classe 'Tabuleiro'.
     '''
     def __init__(self, pos_linha, pos_coluna):
-        ''' (microTabuleiro, int, int) -> None
-        Método construtor da classe microTabuleiro. Herda métodos da classe Tabuleiro.
+        ''' (MicroTabuleiro, int, int) -> None
+        Método construtor da classe MicroTabuleiro. Herda métodos da classe Tabuleiro.
         RECEBE os inteiros pos_linha e pos_coluna que representam a posição [pos_linha][pos_coluna]
         do micro-tabuleiro no macro-tabuleiro.
         '''
@@ -188,15 +188,24 @@ class microTabuleiro(Tabuleiro):
         # para saber se é micro ou macro
         self.eh_macro = False
         
+    def reiniciaMicroTabuleiro(self):
+        '''(MicroTabuleiro) --> none
+        Esse método 'limpa' todas as posições de um micro-tabuleiro que gerou empate
+        '''
+        # Laço duplo para percorrer todas as linhas e colunas de um micro-tabuleiro
+        for linha in range(3):
+            for coluna in range(3):
+                self.configuracaoDoTabuleiro[linha][coluna] = " "
         
-class macroTabuleiro(Tabuleiro):
+        
+class MacroTabuleiro(Tabuleiro):
     '''
     Essa classe representa um macro-tabuleiro do Mega-Jogo-da-Velha.
     Herda métodos da classe 'Tabuleiro'.
     '''
     def __init__(self):
-        '''(macroTabuleiro) --> None
-        Método construtor da classe macroTabuleiro. Herda métodos da classe Tabuleiro.
+        '''(MacroTabuleiro) --> None
+        Método construtor da classe MacroTabuleiro. Herda métodos da classe Tabuleiro.
         '''
         # Para herdar
         Tabuleiro.__init__(self)
@@ -297,7 +306,7 @@ class JogadorComeCru(Jogador):
         
     def escolheJogada(self, microTabuleiro):
         '''(JogadorComeCru, microTabuleiro) --> tuple
-        Esse método retorna o primeiro espaço vazio de um objeto do tipo microTabuleiro.
+        Esse método retorna o primeiro espaço vazio de um objeto do tipo MicroTabuleiro.
         '''
         # Define a posição no micro-tabuleiro onde a jogada será feita
         jogada = microTabuleiro.posicoesVazias[0]
@@ -308,6 +317,16 @@ class JogadorComeCru(Jogador):
         return jogada
        
 
+def quemComeca(jogador_um, jogador_dois):
+    '''(Jogador, Jogador) --> None
+    Essa função define qual dos dois jogadores vai começar jogando.
+    '''
+    numero_sorteado = random.choice([1,2])
+    if numero_sorteado == 1:
+        jogador_um.vezDeJogar = True
+    else:
+        jogador_dois.vezDeJogar = True
+    
 ## ========================================================================================================== ##
 
 def main():
@@ -328,21 +347,18 @@ def main():
     jogador_um = usuario.cria_jogador(numero_jogador_um, 1)
     jogador_dois = usuario.cria_jogador(numero_jogador_dois, 2)
     
-    # Decide aleatoriamente qual jogador vai começar, sorteando '1' ou '2'
-    numero_de_quem_comeca = random.randrange(1,3)
-    if numero_de_quem_comeca == 1:
-        jogador_um.vezDeJogar = True
-    else:
-        jogador_dois.vezDeJogar = True
+    # Decide aleatoriamente qual jogador vai começar
+    quemComeca(jogador_um, jogador_dois)
     
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
-    macro_tabuleiro = macroTabuleiro()
+    macro_tabuleiro = MacroTabuleiro()
         # Micro-tabuleiros. Os números contidos no nome representam a posição (no formato (x, y)) no macro-tabuleiro
-    micro_tabuleiro_00,micro_tabuleiro_01,micro_tabuleiro_02=microTabuleiro(0,0),microTabuleiro(0,1),microTabuleiro(0,2)
-    micro_tabuleiro_10,micro_tabuleiro_11,micro_tabuleiro_12=microTabuleiro(1,0),microTabuleiro(1,1),microTabuleiro(1,2)
-    micro_tabuleiro_20,micro_tabuleiro_21,micro_tabuleiro_22=microTabuleiro(2,0),microTabuleiro(2,1),microTabuleiro(2,2)
+    micro_tabuleiro_00,micro_tabuleiro_01,micro_tabuleiro_02=MicroTabuleiro(0,0),MicroTabuleiro(0,1),MicroTabuleiro(0,2)
+    micro_tabuleiro_10,micro_tabuleiro_11,micro_tabuleiro_12=MicroTabuleiro(1,0),MicroTabuleiro(1,1),MicroTabuleiro(1,2)
+    micro_tabuleiro_20,micro_tabuleiro_21,micro_tabuleiro_22=MicroTabuleiro(2,0),MicroTabuleiro(2,1),MicroTabuleiro(2,2)
     
-    
+    print(jogador_um.vezDeJogar)
+    print(jogador_dois.vezDeJogar)
     # Enquanto ninguém vencer o macro-tabuleiro ou não tiver mais jogadas possíveis, não sai do loop
     while not macro_tabuleiro.tabuleiroAcabou or len(macro_tabuleiro.posicoesVazias) > 0:
         return
