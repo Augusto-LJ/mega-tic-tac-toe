@@ -53,6 +53,7 @@ class Usuario():
             return JogadorEstabanado(simboloDoJogador)
         else:
             return JogadorComeCru(simboloDoJogador)
+        
 
 
 class Tabuleiro:
@@ -202,6 +203,11 @@ class MicroTabuleiro(Tabuleiro):
         # para saber se é micro ou macro
         self.ehMacro = False
         
+    def mandaImprimir(self, qualMicro, Usuario):
+        '''(MicroTabuleiro, tuple, Usuario) --> None
+        Esse método chama o método 'imprimirTabuleiro' para um dado micro-tabuleiro.
+        '''
+        Usuario.arrayDeTabuleiros[qualMicro].imprimirTabuleiro
         
         
     def reiniciaMicroTabuleiro(self):
@@ -228,6 +234,8 @@ class MacroTabuleiro(Tabuleiro):
         # Para herdar
         Tabuleiro.__init__(self)
         self.ehMacro = True
+    
+    
     
 
 class Jogador:
