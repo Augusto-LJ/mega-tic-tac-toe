@@ -27,10 +27,12 @@ git           | 2.23.0
 3) Jogador come-crú: sempre escolhe a primeira posição livre do tabuleiro;<br></br>
 
 &nbsp;&nbsp;Para saber em qual tabuleiro você está jogando, é válido pensar como se o tabuleiro fosse uma matriz, então o tabuleiro do canto superior esquerdo é o tabuleiro de posição [0][0], o que está à direita deste é [0][1] e assim por diante.<br></br>
-&nbsp;&nbsp;O programa sorteará (pseudo)aleatoriamente o jogador que  vai começar jogando. A cada rodada será disposto um menu com as opções possíveis, sendo elas:
+&nbsp;&nbsp;O programa sorteará (pseudo)aleatoriamente o jogador que vai começar jogando. A cada rodada será disposto um menu com as opções possíveis, sendo elas:
 1) Imprimir algum micro-tabuleiro (O jogador deverá digitar '1')
 2) Imprimir o macro-tabuleiro (O jogador deverá digitar '2')
 3) Fazer jogada (O jogador deverá apertar a tecla 'Enter')<br></br>
+
+(A PARTE ABAIXO AINDA ESTÁ EM DESENVOLVIMENTO E PROVAVELMENTE NÃO VAI SE MANTER DESSA FORMA)<br></br>
 
 Se o jogador humano escolher a opção 1, ele deverá, em seguida, digitar a tupla que representa a posição do micro-tabuleiro que ele quer ver (por exemplo '0, 2'); se escolher a opção 2, o macro-tabuleiro será impresso na saída de dados, e se ele apertar a tecla 'Enter', fará a sua jogada digitando uma tupla representando a posição do micro-tabuleiro no macro-tabuleiro e em seguida outra tupla representando a posição onde ele quer fazer a jogada dele no micro-tabuleiro.<br></br>
 &nbsp;&nbsp;Em caso de empate em algum dos micro-tabuleiros, esse micro-tabuleiro é reiniciado, ou seja, ele volta a ser totalmente vazio. No caso de empate no macro-tabuleiro, o jogo simplesmente termina com empate.<br></br>
