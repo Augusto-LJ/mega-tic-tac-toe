@@ -54,7 +54,31 @@ class Usuario():
         else:
             return JogadorComeCru(simboloDoJogador)
         
-
+    def jogadaDaVez(self, jogador_um, jogador_dois):
+        '''(Jogador, Jogador) --> None
+        Esse método faz o jogador da vez realizar sua jogada
+        '''
+        # Se for a vez do jogador_um
+        if jogador_um.vezDeJogar:
+            qualMicroTabuleiro = jogador_um.escolheMicroTabuleiro()
+            if jogador_um.tipoDeJogador == "estabanado" or jogador_um.tipoDeJogador == "comecru":
+                qualPosicao = jogador_um.escolhePosicaoNoMicro(self.arrayDeTabuleiros[qualMicroTabuleiro])
+            else:
+                qualPosicao = jogador_um.escolhePosicaoNoMicro()
+            jogador_um.fazJogada(self, self.arrayDeTabuleiros[qualMicroTabuleiro], qualPosicao)
+        # Se for a vez do jogador_dois
+        else:
+            qualMicroTabuleiro = jogador_dois.escolheMicroTabuleiro()
+            if jogador_dois.tipoDeJogador == "estabanado" or jogador_dois.tipoDeJogador == "comecru":
+                qualPosicao = jogador_dois.escolhePosicaoNoMicro(self.arrayDeTabuleiros[qualMicroTabuleiro])
+            else:
+                qualPosicao = jogador_dois.escolhePosicaoNoMicro()            
+            jogador_dois.fazJogada(self, self.arrayDeTabuleiros[qualMicroTabuleiro], qualPosicao)
+        # Troca a vez
+        jogador_um.vezDeJogar = not jogador_um.vezDeJogar
+        jogador_dois.vezDeJogar = not jogador_dois.vezDeJogar
+        return
+            
 
 class Tabuleiro:
     """
@@ -179,8 +203,8 @@ class Tabuleiro:
         # Se alguém tiver ganhado o tabuleiro de alguma forma
         if diagonalPrincipal or diagonalSecundaria or linha or coluna:
             # Se for macro-tabuleiro:
-                if self.ehMacro:
-                    self.tabuleiroAcabou = True           
+            if self.ehMacro:
+                self.tabuleiroAcabou = True           
             return True
             
 
@@ -218,7 +242,7 @@ class MicroTabuleiro(Tabuleiro):
         for linha in range(3):
             for coluna in range(3):
                 self.configuracaoDoTabuleiro[linha][coluna] = " "
-        # Atualizaz a lista de posições vazias desde micro-tabuleiro
+        # Atualiza a lista de posições vazias desse micro-tabuleiro
         self.posicoesVazias = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
         
         
@@ -234,8 +258,6 @@ class MacroTabuleiro(Tabuleiro):
         # Para herdar
         Tabuleiro.__init__(self)
         self.ehMacro = True
-    
-    
     
 
 class Jogador:
@@ -280,6 +302,14 @@ class JogadorHumano(Jogador):
     Classe que repesenta um jogador do tipo "humano".
     Esse tipo de jogador é controlado por um humano e digita as jogados no teclado do computador.
     '''
+    def __init__(self, simboloDoJogador):
+        '''(JogadorHumano) --> None
+        Método construtor da classe JogadorHumano
+        '''
+        Jogador.__init__(self, simboloDoJogador)
+        self.tipoDeJogador = "humano"
+        
+        
     def escolheMicroTabuleiro(self):
         '''(JogadorHumano) --> tuple
         Esse método determina em qual micro-tabuleiro o usuário quer fazer a jogada.
@@ -316,6 +346,14 @@ class JogadorEstabanado(Jogador):
     Classe que representa um jogador do tipo "estabanado".
     Esse tipo de jogador é controlado pelo computador e sempre joga numa posição aleatória do tabuleiro.
     '''
+    def __init__(self, simboloDoJogador):
+        '''(JogadorEstabanado) --> None
+        Método construtor da classe JogadorEstabando
+        '''
+        Jogador.__init__(self, simboloDoJogador)
+        self.tipoDeJogador = "estabanado"
+    
+    
     def escolheMicroTabuleiro(self):
         '''(JogadorEstabanado) --> tuple
         Esse método retorna aleatoriamente um dos micro-tabuleiros disponíveis.
@@ -332,7 +370,7 @@ class JogadorEstabanado(Jogador):
         '''
         # Define a jogada aleatoriamente
         qualPosicao = random.choice(microTabuleiro.posicoesVazias)
-        indiceDaJogada = microTabuleiro.posicoesVazias.index(jogada)
+        indiceDaJogada = microTabuleiro.posicoesVazias.index(qualPosicao)
         # Tira essa posição da lista das posicoes vazias
         del microTabuleiro.posicoesVazias[indiceDaJogada]                    
         return qualPosicao
@@ -343,6 +381,14 @@ class JogadorComeCru(Jogador):
     Classe que representa um jogador do tipo "come-crú".
     Esse tipo de jogador é controlado pelo computador e sempre joga na primeira posição livre do tabuleiro.
     '''
+    def __init__(self, simboloDoJogador):
+        '''(JogadorComeCru) --> None
+        Método construtor da classe JogadorComeCru
+        '''
+        Jogador.__init__(self, simboloDoJogador)
+        self.tipoDeJogador = "comecru"
+    
+    
     def escolheMicroTabuleiro(self):
         '''(JogadorComeCru) --> tuple
         Esse método retorna o primeiro micro-tabuleiro disponível.
@@ -358,21 +404,13 @@ class JogadorComeCru(Jogador):
         '''
         # Define a posição no micro-tabuleiro onde a jogada será feita
         qualPosicao = microTabuleiro.posicoesVazias[0]
-        indiceDaJogada = microTabuleiro.posicoesVazias.index(jogada)
+        indiceDaJogada = microTabuleiro.posicoesVazias.index(qualPosicao)
         # Tira essa posição da lista das posicoes vazias
         del microTabuleiro.posicoesVazias[indiceDaJogada]  
         return qualPosicao
        
+    
 
-def quemComeca(jogador_um, jogador_dois):
-    '''(Jogador, Jogador) --> None
-    Essa função define qual dos dois jogadores vai começar jogando.
-    '''
-    numero_sorteado = random.choice([1,2])
-    if numero_sorteado == 1:
-        jogador_um.vezDeJogar = True
-    else:
-        jogador_dois.vezDeJogar = True
     
 ## ========================================================================================================== ##
 
@@ -389,10 +427,9 @@ def main():
     # Escolhe o tipo dos dois jogadores
     tipo_jogador_um, tipo_jogador_dois = usuario.escolhe_jogadores() 
     # Cria os dois jogadores
-    jogador_um = usuario.cria_jogador(tipo_jogador_um, "X")
-    jogador_dois = usuario.cria_jogador(tipo_jogador_dois, "O")
-    # Decide aleatoriamente qual jogador vai começar
-    quemComeca(jogador_um, jogador_dois)
+    jogador_um, jogador_dois = usuario.cria_jogador(tipo_jogador_um, "X"), usuario.cria_jogador(tipo_jogador_dois, "O")
+    # Determina que o jogador_um vai começar jogando
+    jogador_um.vezDeJogar = True
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
     macro_tabuleiro = MacroTabuleiro()
         # Micro-tabuleiros. Os números contidos no nome representam a posição (no formato (x, y)) no macro-tabuleiro
@@ -406,10 +443,10 @@ def main():
     # Cria array com a lista dos micro-tabuleiros
     usuario.criaArrayDeTabuleiros(listaDeMicroTabuleiros)
     
-    
     # Enquanto ninguém vencer o macro-tabuleiro ou não tiver mais jogadas possíveis, não sai do loop
     while not macro_tabuleiro.tabuleiroAcabou or len(macro_tabuleiro.posicoesVazias) > 0:
-        return
+        usuario.jogadaDaVez(jogador_um, jogador_dois)
+      
 
 
 '''
