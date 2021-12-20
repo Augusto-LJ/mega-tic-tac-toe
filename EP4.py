@@ -61,19 +61,38 @@ class Usuario():
         # Se for a vez do jogador_um
         if jogador_um.vezDeJogar:
             qualMicroTabuleiro = jogador_um.escolheMicroTabuleiro()
+            # Apelido para o micro-tabuleiro
+            microTabuleiro = self.arrayDeTabuleiros[qualMicroTabuleiro]
             if jogador_um.tipoDeJogador == "estabanado" or jogador_um.tipoDeJogador == "comecru":
-                qualPosicao = jogador_um.escolhePosicaoNoMicro(self.arrayDeTabuleiros[qualMicroTabuleiro])
+                qualPosicao = jogador_um.escolhePosicaoNoMicro(microTabuleiro)
+                jogador_um.fazJogada(self, microTabuleiro, qualPosicao)
+
             else:
                 qualPosicao = jogador_um.escolhePosicaoNoMicro()
-            jogador_um.fazJogada(self, self.arrayDeTabuleiros[qualMicroTabuleiro], qualPosicao)
+                # Verifica se jogada é válida ou não
+                if jogador_um.verificaJogada(microTabuleiro, qualPosicao):
+                    jogador_um.fazJogada(self, microTabuleiro, qualPosicao)
+                else:
+                    print("Jogada inválida!")
+                    self.jogadaDaVez(jogador_um, jogador_dois)
+                    return            
         # Se for a vez do jogador_dois
         else:
             qualMicroTabuleiro = jogador_dois.escolheMicroTabuleiro()
+            # Apelido para o micro-tabuleiro
+            microTabuleiro = self.arrayDeTabuleiros[qualMicroTabuleiro]
             if jogador_dois.tipoDeJogador == "estabanado" or jogador_dois.tipoDeJogador == "comecru":
                 qualPosicao = jogador_dois.escolhePosicaoNoMicro(self.arrayDeTabuleiros[qualMicroTabuleiro])
+                jogador_dois.fazJogada(self, microTabuleiro, qualPosicao)
             else:
-                qualPosicao = jogador_dois.escolhePosicaoNoMicro()            
-            jogador_dois.fazJogada(self, self.arrayDeTabuleiros[qualMicroTabuleiro], qualPosicao)
+                qualPosicao = jogador_dois.escolhePosicaoNoMicro()
+                # Verifica se jogada é válida ou não
+                if jogador_dois.verificaJogada(microTabuleiro, qualPosicao):
+                    jogador_dois.fazJogada(self, microTabuleiro, qualPosicao)
+                else:
+                    print("Jogada inválida!")
+                    self.jogadaDaVez(jogador_um, jogador_dois)
+                    return
         # Troca a vez
         jogador_um.vezDeJogar = not jogador_um.vezDeJogar
         jogador_dois.vezDeJogar = not jogador_dois.vezDeJogar
@@ -294,6 +313,11 @@ class Jogador:
         # Tira a posição qualPosicao da lista de posições vazias
         indiceDaPosicao = tabuleiro.posicoesVazias.index((qualPosicao))
         del tabuleiro.posicoesVazias[indiceDaPosicao]
+        # Se o jogador não for do tipo Humano, imprimir na saída de dados a jogada que foi feita
+        if self.tipoDeJogador == "humano":
+            print("\nJogada realizada!\n")
+        else:
+            print(f'\nO computador fez a seguinte jogada: Micro-tabuleiro[{linha}][{coluna}]; posição: {qualPosicao}\n')
         return
         
     
@@ -315,9 +339,21 @@ class JogadorHumano(Jogador):
         Esse método determina em qual micro-tabuleiro o usuário quer fazer a jogada.
         RETORNA a tupla qualMicroTabuleiro, que indica em qual micro-tabuleiro a jogada será feita
         '''
+        escolheu_linha = False
+        escolheu_coluna = False
         # Determina em qual micro-tabuleiro a jogada será feita
-        qualLinhaDoMacro = int(input("Digite qual linha do macro-tabuleiro você quer jogar: "))
-        qualColunaDoMacro = int(input("Digite qual coluna do macro-tabuleiro você quer jogar: "))
+        while not escolheu_linha:
+            qualLinhaDoMacro = int(input("Digite qual linha do macro-tabuleiro você quer jogar: "))
+            if qualLinhaDoMacro < 0 or qualLinhaDoMacro > 2:
+                print("Valor inválido!")
+            else:
+                escolheu_linha = True
+        while not escolheu_coluna:
+            qualColunaDoMacro = int(input("Digite qual coluna do macro-tabuleiro você quer jogar: "))
+            if qualColunaDoMacro < 0 or qualColunaDoMacro > 2:
+                print("Valor inválido!")
+            else:
+                escolheu_coluna = True
         qualMicroTabuleiro = qualLinhaDoMacro, qualColunaDoMacro
         return qualMicroTabuleiro
     
@@ -326,19 +362,32 @@ class JogadorHumano(Jogador):
         '''(JogadorHumano) --> tuple
         RETORNA a tupla qualPosicao que indica onde a jogada será feito no micro-tabuleiro.
         '''
+        escolheu_linha = False
+        escolheu_coluna = False
         # Determina em qual posição do micro-tabuleiro a jogada será feita
-        qualLinha = int(input("Digite qual linha do micro-tabuleiro você quer jogar: "))
-        qualColuna = int(input("Digite qual coluna do micro-tabuleiro você quer jogar: "))
+        while not escolheu_linha:
+            qualLinha = int(input("Digite qual linha do micro-tabuleiro você quer jogar: "))
+            if qualLinha < 0 or qualLinha > 2:
+                print("Valor inválido!")
+            else:
+                escolheu_linha = True
+        while not escolheu_coluna:
+            qualColuna = int(input("Digite qual coluna do micro-tabuleiro você quer jogar: "))
+            if qualColuna < 0 or qualColuna > 2:
+                print("Valor inválido!")
+            else:
+                escolheu_coluna = True
         qualPosicao = qualLinha, qualColuna
         return qualPosicao
 
     
-    def verificaJogada(self, MicroTabuleiro, qualPosicao):
+    def verificaJogada(self, microTabuleiro, qualPosicao):
         '''(JogadorHumano, MicroTabuleiro, tuple) --> bool
         Verifica se a posição [qualLinha, qualColuna] do MicroTabuleiro está vazia
         RETORNA True se a posição estiver vazia e False caso contrário.
         '''
-        return MicroTabuleiro.verificaPosicaoVazia[qualPosicao]
+        linha, coluna = qualPosicao
+        return microTabuleiro.verificaPosicaoVazia(linha, coluna)
         
         
 class JogadorEstabanado(Jogador):
