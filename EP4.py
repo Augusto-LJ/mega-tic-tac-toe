@@ -248,41 +248,10 @@ class Jogador:
         Esse método retorna a lista dos tabuleiros que ainda estão disponíveis.
         '''
         return self.tabuleirosDisponiveis
-        
     
-class JogadorHumano(Jogador):
-    '''
-    Classe que repesenta um jogador do tipo "humano".
-    Esse tipo de jogador é controlado por um humano e digita as jogados no teclado do computador.
-    '''
-    def escolheJogada(self):
-        '''(JogadorHumano) --> tuple, tuple
-        Esse método define a jogada que será feita pelo Jogador humano.
-        RETORNA a tupla qualMicroTabuleiro, que indica em qual micro-tabuleiro a jogada será feita, e
-        a tupla qualPosicao que indica onde a jogada será feito no micro-tabuleiro.
-        '''
-        # Determina em qual micro-tabuleiro a jogada será feita
-        qualLinhaDoMacro = int(input("Digite qual linha do macro-tabuleiro você quer jogar: "))
-        qualColunaDoMacro = int(input("Digite qual coluna do macro-tabuleiro você quer jogar: "))
-        qualMicroTabuleiro = qualLinhaDoMacro, qualColunaDoMacro
-        # Determina em qual posição do micro-tabuleiro a jogada será feita
-        qualLinha = int(input("Digite qual linha do micro-tabuleiro você quer jogar: "))
-        qualColuna = int(input("Digite qual coluna do micro-tabuleiro você quer jogar: "))
-        qualPosicao = qualLinha, qualColuna
-        
-        return qualMicroTabuleiro, qualPosicao
-    
-    def verificaJogada(self, MicroTabuleiro, qualposicao):
-        '''(JogadorHumano, MicroTabuleiro, tuple) --> bool
-        Verifica se a posição [qualLinha, qualColuna] do MicroTabuleiro está vazia
-        RETORNA True se a posição estiver vazia e False caso contrário.
-        '''
-        return MicroTabuleiro.verificaPosicaoVazia[qualPosicao]
-        
-        
     def fazJogada(self, Usuario, MicroTabuleiro, qualPosicao):
-        '''(JogadorHumano, Usuario, MicroTabuleiro, tuple) --> None
-        Realiza uma jogada de um Jogador Humano em um micro-tabuleiro.
+        '''(Jogador, Usuario, MicroTabuleiro, tuple) --> None
+        Realiza uma jogada de um Jogador em um micro-tabuleiro.
         '''
         # Apelido para o micro-tabuleiro em questão
         tabuleiro = Usuario.arrayDeTabuleiros[qualPosicao]
@@ -297,6 +266,42 @@ class JogadorHumano(Jogador):
         del tabuleiro.posicoesVazias[indiceDaPosicao]
         return
         
+    
+class JogadorHumano(Jogador):
+    '''
+    Classe que repesenta um jogador do tipo "humano".
+    Esse tipo de jogador é controlado por um humano e digita as jogados no teclado do computador.
+    '''
+    def escolheMicroTabuleiro(self):
+        '''(JogadorHumano) --> tuple
+        Esse método determina em qual micro-tabuleiro o usuário quer fazer a jogada.
+        RETORNA a tupla qualMicroTabuleiro, que indica em qual micro-tabuleiro a jogada será feita
+        '''
+        # Determina em qual micro-tabuleiro a jogada será feita
+        qualLinhaDoMacro = int(input("Digite qual linha do macro-tabuleiro você quer jogar: "))
+        qualColunaDoMacro = int(input("Digite qual coluna do macro-tabuleiro você quer jogar: "))
+        qualMicroTabuleiro = qualLinhaDoMacro, qualColunaDoMacro
+        return qualMicroTabuleiro
+    
+    
+    def escolhePosicaoNoMicro(self):
+        '''(JogadorHumano) --> tuple
+        RETORNA a tupla qualPosicao que indica onde a jogada será feito no micro-tabuleiro.
+        '''
+        # Determina em qual posição do micro-tabuleiro a jogada será feita
+        qualLinha = int(input("Digite qual linha do micro-tabuleiro você quer jogar: "))
+        qualColuna = int(input("Digite qual coluna do micro-tabuleiro você quer jogar: "))
+        qualPosicao = qualLinha, qualColuna
+        return qualPosicao
+
+    
+    def verificaJogada(self, MicroTabuleiro, qualPosicao):
+        '''(JogadorHumano, MicroTabuleiro, tuple) --> bool
+        Verifica se a posição [qualLinha, qualColuna] do MicroTabuleiro está vazia
+        RETORNA True se a posição estiver vazia e False caso contrário.
+        '''
+        return MicroTabuleiro.verificaPosicaoVazia[qualPosicao]
+        
         
 class JogadorEstabanado(Jogador):
     '''
@@ -305,7 +310,7 @@ class JogadorEstabanado(Jogador):
     '''
     def escolheMicroTabuleiro(self):
         '''(JogadorEstabanado) --> tuple
-        Esse método retorna
+        Esse método retorna aleatoriamente um dos micro-tabuleiros disponíveis.
         '''
         # Define em qual micro-tabuleiro vai jogar usando o módulo random
         return random.choice(self.microTabuleirosDisponiveis)
@@ -318,18 +323,11 @@ class JogadorEstabanado(Jogador):
         Além disso, atualiza a lista das posições vazias de um objeto do tipo microTabuleiro.
         '''
         # Define a jogada aleatoriamente
-        jogada = random.choice(microTabuleiro.posicoesVazias)
+        qualPosicao = random.choice(microTabuleiro.posicoesVazias)
         indiceDaJogada = microTabuleiro.posicoesVazias.index(jogada)
         # Tira essa posição da lista das posicoes vazias
         del microTabuleiro.posicoesVazias[indiceDaJogada]                    
-        return jogada
-    
-    
-    def fazJogada(self, Usuario, MicroTabuleiro, qualPosicao):
-        '''(JgadorEstabanado, Usuario, MicroTabuleiro, tuple)
-        
-        
-        pass
+        return qualPosicao
     
     
 class JogadorComeCru(Jogador):
@@ -346,16 +344,16 @@ class JogadorComeCru(Jogador):
         return qualMicroTabuleiro
         
         
-    def escolheJogada(self, microTabuleiro):
+    def escolhePosicaoNoMicro(self, microTabuleiro):
         '''(JogadorComeCru, microTabuleiro) --> tuple
         Esse método retorna o primeiro espaço vazio de um objeto do tipo MicroTabuleiro.
         '''
         # Define a posição no micro-tabuleiro onde a jogada será feita
-        jogada = microTabuleiro.posicoesVazias[0]
+        qualPosicao = microTabuleiro.posicoesVazias[0]
         indiceDaJogada = microTabuleiro.posicoesVazias.index(jogada)
         # Tira essa posição da lista das posicoes vazias
         del microTabuleiro.posicoesVazias[indiceDaJogada]  
-        return jogada
+        return qualPosicao
        
 
 def quemComeca(jogador_um, jogador_dois):
