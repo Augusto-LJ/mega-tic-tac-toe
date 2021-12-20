@@ -167,6 +167,21 @@ class Tabuleiro:
         # Se percorrer toda a lista e não tiver nenhum valor diferente, retorna True
         return True
     
+    def verificaSeGanhouTabuleiro(self, qualPosicao, jogadorDaVez, outroJogador):
+        '''(Tabuleiro, tuple, Jogador, Jogador) --> None
+        Verifica se algum dos dois jogadores ganhou o Tabuleiro em questão.
+        '''
+        diagonalPrincipal = self.verificaDiagonalPrincipal(jogadorDaVez.simboloDoJogador)
+        diagonalSecundaria = self.verificaDiagonalSecundaria(jogadorDaVez.simboloDoJogador)
+        linha = self.verificaLinha(qualPosicao[0], jogadorDaVez.simboloDoJogador)
+        coluna = self.verificaColuna(qualPosicao[1], jogadorDaVez.simboloDoJogador)
+        # Se alguém tiver ganhado o tabuleiro de alguma forma
+        if diagonalPrincipal or diagonalSecundaria or linha or coluna:
+            # Se for macro-tabuleiro:
+                if self.ehMacro:
+                    self.tabuleiroAcabou = True           
+            return True
+            
 
 class MicroTabuleiro(Tabuleiro):
     '''
@@ -185,7 +200,7 @@ class MicroTabuleiro(Tabuleiro):
         self.pos_lin = pos_linha
         self.pos_col = pos_coluna
         # para saber se é micro ou macro
-        self.eh_macro = False
+        self.ehMacro = False
         
         
         
@@ -212,7 +227,7 @@ class MacroTabuleiro(Tabuleiro):
         '''
         # Para herdar
         Tabuleiro.__init__(self)
-        self.eh_macro = True
+        self.ehMacro = True
     
 
 class Jogador:
@@ -266,11 +281,11 @@ class JogadorHumano(Jogador):
         
         
     def fazJogada(self, Usuario, MicroTabuleiro, qualPosicao):
-        '''(JogadorHumano, Usuario, MicroTabuleiro, int, int) --> None
-        Realiza uma jogada em um micro-tabuleiro.
+        '''(JogadorHumano, Usuario, MicroTabuleiro, tuple) --> None
+        Realiza uma jogada de um Jogador Humano em um micro-tabuleiro.
         '''
         # Apelido para o micro-tabuleiro em questão
-        tabuleiro = arrayDeTabuleiros[qualPosicao]
+        tabuleiro = Usuario.arrayDeTabuleiros[qualPosicao]
         # Lugar onde será feita a jogada
         linha, coluna = qualPosicao
         # Qual símbolo será marcado
@@ -310,7 +325,9 @@ class JogadorEstabanado(Jogador):
         return jogada
     
     
-    def fazJogada():
+    def fazJogada(self, Usuario, MicroTabuleiro, qualPosicao):
+        '''(JgadorEstabanado, Usuario, MicroTabuleiro, tuple)
+        
         
         pass
     
