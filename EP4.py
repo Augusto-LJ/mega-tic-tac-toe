@@ -60,6 +60,7 @@ class Usuario():
         '''
         # Se for a vez do jogador_um
         if jogador_um.vezDeJogar:
+            print(" ----- Vez do Jogador 1 ----- ")
             qualMicroTabuleiro = jogador_um.escolheMicroTabuleiro()
             # Apelido para o micro-tabuleiro
             microTabuleiro = self.arrayDeTabuleiros[qualMicroTabuleiro]
@@ -73,16 +74,17 @@ class Usuario():
                 if jogador_um.verificaJogada(microTabuleiro, qualPosicao):
                     jogador_um.fazJogada(self, microTabuleiro, qualPosicao)
                 else:
-                    print("Jogada inválida!")
+                    print("\nJogada inválida! - primeiro if de jogadaDaVez")
                     self.jogadaDaVez(jogador_um, jogador_dois)
                     return            
         # Se for a vez do jogador_dois
         else:
+            print(" ----- Vez do Jogador 2 ----- ")
             qualMicroTabuleiro = jogador_dois.escolheMicroTabuleiro()
             # Apelido para o micro-tabuleiro
             microTabuleiro = self.arrayDeTabuleiros[qualMicroTabuleiro]
             if jogador_dois.tipoDeJogador == "estabanado" or jogador_dois.tipoDeJogador == "comecru":
-                qualPosicao = jogador_dois.escolhePosicaoNoMicro(self.arrayDeTabuleiros[qualMicroTabuleiro])
+                qualPosicao = jogador_dois.escolhePosicaoNoMicro(microTabuleiro)
                 jogador_dois.fazJogada(self, microTabuleiro, qualPosicao)
             else:
                 qualPosicao = jogador_dois.escolhePosicaoNoMicro()
@@ -90,7 +92,7 @@ class Usuario():
                 if jogador_dois.verificaJogada(microTabuleiro, qualPosicao):
                     jogador_dois.fazJogada(self, microTabuleiro, qualPosicao)
                 else:
-                    print("Jogada inválida!")
+                    print("\nJogada inválida!  else de jogadaDaVez")
                     self.jogadaDaVez(jogador_um, jogador_dois)
                     return
         # Troca a vez
@@ -298,21 +300,27 @@ class Jogador:
         '''
         return self.tabuleirosDisponiveis
     
-    def fazJogada(self, Usuario, MicroTabuleiro, qualPosicao):
+    def fazJogada(self, Usuario, microTabuleiro, qualPosicao):
         '''(Jogador, Usuario, MicroTabuleiro, tuple) --> None
         Realiza uma jogada de um Jogador em um micro-tabuleiro.
         '''
         # Apelido para o micro-tabuleiro em questão
-        tabuleiro = Usuario.arrayDeTabuleiros[qualPosicao]
+        #tabuleiro = Usuario.arrayDeTabuleiros[qualPosicao]
         # Lugar onde será feita a jogada
         linha, coluna = qualPosicao
         # Qual símbolo será marcado
         simboloDoJogador = self.simboloDoJogador
-        # Faz a jogada
-        tabuleiro.configuracaoDoTabuleiro[linha][coluna] = simboloDoJogador
-        # Tira a posição qualPosicao da lista de posições vazias
-        indiceDaPosicao = tabuleiro.posicoesVazias.index((qualPosicao))
-        del tabuleiro.posicoesVazias[indiceDaPosicao]
+        if microTabuleiro.verificaPosicaoVazia(linha, coluna):
+            print("Passei pela condicional de fazJogada")
+            # Faz a jogada
+            microTabuleiro.configuracaoDoTabuleiro[linha][coluna] = simboloDoJogador
+            # Tira a posição qualPosicao da lista de posições vazias
+            indiceDaPosicao = microTabuleiro.posicoesVazias.index((qualPosicao))
+            del microTabuleiro.posicoesVazias[indiceDaPosicao]
+        else:
+            print("\nJogada inválida! - fazJogada")
+            Usuario.jogadaDaVez(jogador_um, jogador_dois)
+            return
         # Se o jogador não for do tipo Humano, imprimir na saída de dados a jogada que foi feita
         if self.tipoDeJogador == "humano":
             print("\nJogada realizada!\n")
