@@ -6,14 +6,13 @@ import numpy as np
 class Usuario():
     '''
     Esta classe representa o usuário do programa. Cria os jogadores e gerencia os tabuleiros.
-    '''     
-        
-    def criaArrayDeTabuleiros(self, listaDeTabuleiros):
+    '''
+    def criaArrayDeTabuleiros(self, listaDeMicroTabuleiros):
         '''(Usuario, list) --> None
         Essa função recebe uma lista contendo todos os tabuleiros e cria um array
         dessa lista usando o módulo numpy
         '''
-        self.arrayDeTabuleiros = np.array(listaDeTabuleiros)
+        self.arrayDeTabuleiros = np.array(listaDeMicroTabuleiros)
         
         
     def escolhe_jogadores(self):
@@ -38,7 +37,7 @@ class Usuario():
                 escolha_do_jogador_dois = int(input("Escolha o tipo do Jogador 2 (O): "))
                 if escolha_do_jogador_dois not in possiveis_escolhas:
                     print("Comando inválido!")
-                escolheu_jogadores = True
+            escolheu_jogadores = True
         return escolha_do_jogador_um, escolha_do_jogador_dois
     
     
@@ -242,10 +241,10 @@ class JogadorHumano(Jogador):
     Esse tipo de jogador é controlado por um humano e digita as jogados no teclado do computador.
     '''
     def escolheJogada(self):
-        '''(JogadorHumano) --> tuple, int, int
+        '''(JogadorHumano) --> tuple, tuple
         Esse método define a jogada que será feita pelo Jogador humano.
         RETORNA a tupla qualMicroTabuleiro, que indica em qual micro-tabuleiro a jogada será feita, e
-        os inteiros qualLinha e qualColuna que indicam onde a jogada será feito no micro-tabuleiro.
+        a tupla qualPosicao que indica onde a jogada será feito no micro-tabuleiro.
         '''
         # Determina em qual micro-tabuleiro a jogada será feita
         qualLinhaDoMacro = int(input("Digite qual linha do macro-tabuleiro você quer jogar: "))
@@ -253,11 +252,37 @@ class JogadorHumano(Jogador):
         qualMicroTabuleiro = qualLinhaDoMacro, qualColunaDoMacro
         # Determina em qual posição do micro-tabuleiro a jogada será feita
         qualLinha = int(input("Digite qual linha do micro-tabuleiro você quer jogar: "))
-        qualColuna = int(input("Digite qual colunaa do micro-tabuleiro você quer jogar: "))
+        qualColuna = int(input("Digite qual coluna do micro-tabuleiro você quer jogar: "))
+        qualPosicao = qualLinha, qualColuna
         
-        return qualMicroTabuleiro, qualLinha, qualColuna    
-
-
+        return qualMicroTabuleiro, qualPosicao
+    
+    def verificaJogada(self, MicroTabuleiro, qualposicao):
+        '''(JogadorHumano, MicroTabuleiro, tuple) --> bool
+        Verifica se a posição [qualLinha, qualColuna] do MicroTabuleiro está vazia
+        RETORNA True se a posição estiver vazia e False caso contrário.
+        '''
+        return MicroTabuleiro.verificaPosicaoVazia[qualPosicao]
+        
+        
+    def fazJogada(self, Usuario, MicroTabuleiro, qualPosicao):
+        '''(JogadorHumano, Usuario, MicroTabuleiro, int, int) --> None
+        Realiza uma jogada em um micro-tabuleiro.
+        '''
+        # Apelido para o micro-tabuleiro em questão
+        tabuleiro = arrayDeTabuleiros[qualPosicao]
+        # Lugar onde será feita a jogada
+        linha, coluna = qualPosicao
+        # Qual símbolo será marcado
+        simboloDoJogador = self.simboloDoJogador
+        # Faz a jogada
+        tabuleiro.configuracaoDoTabuleiro[linha][coluna] = simboloDoJogador
+        # Tira a posição qualPosicao da lista de posições vazias
+        indiceDaPosicao = tabuleiro.posicoesVazias.index((qualPosicao))
+        del tabuleiro.posicoesVazias[indiceDaPosicao]
+        return
+        
+        
 class JogadorEstabanado(Jogador):
     '''
     Classe que representa um jogador do tipo "estabanado".
@@ -357,6 +382,7 @@ def main():
                               [micro20, micro21, micro22]]
     # Cria array com a lista dos micro-tabuleiros
     usuario.criaArrayDeTabuleiros(listaDeMicroTabuleiros)
+    
     
     # Enquanto ninguém vencer o macro-tabuleiro ou não tiver mais jogadas possíveis, não sai do loop
     while not macro_tabuleiro.tabuleiroAcabou or len(macro_tabuleiro.posicoesVazias) > 0:
