@@ -111,7 +111,7 @@ class Usuario():
         return
             
     
-    def menuDeOpcoes(self, MacroTabuleiro):
+    def menuDeOpcoes(self, MacroTabuleiro, jogador_um):
         '''(Usuario, MacroTabuleiro) --> None
         Esse método apresenta um menu de opções que o jogador pode escolher antes
         de prosseguir com o jogo
@@ -119,12 +119,14 @@ class Usuario():
         print("\nEscolha uma opção escrevendo o número correspondente: ")
         escolhaDoJogador = None
         while not escolhaDoJogador == 1:
-            escolhaDoJogador = int(input("1) Prosseguir para a jogada\n2) Imprimir macro-tabuleiro\n3) Imprimir algum micro-tabuleiro\nO que você gostaria de fazer? "))
+            escolhaDoJogador = int(input("1) Prosseguir para a jogada\n2) Imprimir macro-tabuleiro\n3) Mostrar micro-tabuleiros disponíveis\n4) Imprimir algum micro-tabuleiro\nO que você gostaria de fazer? "))
             if escolhaDoJogador == 1:   # prosseguir com o jogo
                 return
             elif escolhaDoJogador == 2: # imprimir macro-tabuleiro
                 strDoMacro = MacroTabuleiro.imprimirTabuleiro()
                 print(strDoMacro)
+            elif escolhaDoJogador == 3: # mostrar micro-tabuleiros disponíiveis
+                print(f'\n Os micro-tabuleiros disponíveis são:\n {jogador_um.microTabuleirosDisponiveis}')
             else:                       # imprimir algum micro-tabuleiro
                 self.mandaImprimir()
         return            
@@ -482,8 +484,12 @@ class JogadorComeCru(Jogador):
         indiceDaJogada = microTabuleiro.posicoesVazias.index(qualPosicao)
         return qualPosicao
        
-    
-
+def transformaEmClone(jogador_um, jogador_dois):
+    '''(Jogador, Jogador) --> None
+    Essa função pega o atributo 'microTabuleirosDisponiveis' de dois objetos do tipo 'Jogador'
+    e transforma um em um clone do outro
+    '''
+    jogador_um.microTabuleirosDisponiveis = jogador_dois.microTabuleirosDisponiveis
     
 ## ========================================================================================================== ##
 
@@ -501,6 +507,8 @@ def main():
     tipo_jogador_um, tipo_jogador_dois = usuario.escolhe_jogadores() 
     # Cria os dois jogadores
     jogador_um, jogador_dois = usuario.cria_jogador(tipo_jogador_um, "X"), usuario.cria_jogador(tipo_jogador_dois, "O")
+    # transforma o atributo 'tabuleirosDisponiveis' dos jogadores em clones um do outro
+    transformaEmClone(jogador_um, jogador_dois)
     # Determina que o jogador_um vai começar jogando
     jogador_um.vezDeJogar = True
     # Aqui são criados o macro-tabuleiro e os 9 micro-tabuleiros
@@ -518,7 +526,7 @@ def main():
     
     # Enquanto ninguém vencer o macro-tabuleiro ou não tiver mais jogadas possíveis, não sai do loop
     while not macro_tabuleiro.tabuleiroAcabou or len(macro_tabuleiro.posicoesVazias) > 0:
-        usuario.menuDeOpcoes(macro_tabuleiro)
+        usuario.menuDeOpcoes(macro_tabuleiro, jogador_um)
         usuario.jogadaDaVez(jogador_um, jogador_dois)
       
 
