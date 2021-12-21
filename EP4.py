@@ -56,8 +56,8 @@ class Usuario():
         else:
             return JogadorComeCru(simboloDoJogador)
         
-    def jogadaDaVez(self, jogador_um, jogador_dois):
-        '''(Jogador, Jogador) --> None
+    def jogadaDaVez(self, jogador_um, jogador_dois, macroTabuleiro):
+        '''(Usuario, Jogador, Jogador) --> None
         Esse método faz o jogador da vez realizar sua jogada
         '''
         # Se for a vez do jogador_um
@@ -77,15 +77,18 @@ class Usuario():
                     jogador_um.fazJogada(self, microTabuleiro, qualPosicao, qualMicroTabuleiro)
                 else:
                     print("\nJogada inválida!")
-                    self.jogadaDaVez(jogador_um, jogador_dois)
+                    self.jogadaDaVez(jogador_um, jogador_dois, macroTabuleiro)
                     return       
-            # Faz verificações no micro-tabuleiro jgoado recentemente
+            # Faz verificações no micro-tabuleiro jogado recentemente
             if microTabuleiro.verificaSeGanhouTabuleiro(qualPosicao, jogador_um):
                 microTabuleiro.posicoesVazias = []
                 indice = jogador_um.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
                 # Retira esse micro-tabuleiro da lista dos disponíveis
                 del jogador_um.microTabuleirosDisponiveis[indice]
-                
+                # Marca no macro-tabuleiro
+                macroTabuleiro.marcaVitoria(qualMicroTabuleiro, jogador_um)
+                if macroTabuleiro.verificaSeGanhouTabuleiro(qualMicroTabuleiro, jogador_um):
+                    self.venceuJogo(jogador_um, macroTabuleiro)
         # Se for a vez do jogador_dois
         else:
             print("\n ----- Vez do Jogador 2 ----- ")
@@ -102,14 +105,18 @@ class Usuario():
                     jogador_dois.fazJogada(self, microTabuleiro, qualPosicao, qualMicroTabuleiro)
                 else:
                     print("\nJogada inválida!")
-                    self.jogadaDaVez(jogador_um, jogador_dois)
+                    self.jogadaDaVez(jogador_um, jogador_dois, macroTabuleiro)
                     return
-            # Faz verificações no micro-tabuleiro jgoado recentemente
+            # Faz verificações no micro-tabuleiro jogado recentemente
             if microTabuleiro.verificaSeGanhouTabuleiro(qualPosicao, jogador_dois):
                 microTabuleiro.posicoesVazias = []
                 indice = jogador_dois.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
                 # Retira esse micro-tabuleiro da lista dos disponíveis
                 del jogador_dois.microTabuleirosDisponiveis[indice]
+                # Marca no macro-tabuleiro
+                macroTabuleiro.marcaVitoria(qualMicroTabuleiro, jogador_dois)
+                if macroTabuleiro.verificaSeGanhouTabuleiro(qualMicroTabuleiro, jogador_dois):
+                    self.venceuJogo(jogador_dois, macroTabuleiro)
                 
         # Troca a vez
         jogador_um.vezDeJogar = not jogador_um.vezDeJogar
@@ -168,13 +175,20 @@ class Usuario():
                 print("\nComando inválido!")
                 self.menuDeOpcoes(MacroTabuleiro, jogador_um)
                 return
-        return            
+        return
 
     
-    def verificaMicroTabuleiro(self, microTabuleiro, qualPosicao):
-        '''(Usuario, MicroTabuleiro) --> None
-        Esse método verifica se
+    def venceuJogo(self, jogador, macroTabuleiro):
+        '''(Usuario, Jogador, MacroTabuleiro) --> None
+        Esse método sinaliza que algum dos jogadores venceu o jogo, finalizando a partida
         '''
+        macroTabuleiro.tabuleiroAcabou = True
+        if jogador.simboloDoJogador == "X":
+            print("Parabéns JOGADOR 1 por vencer o Mega Jogo da Velha!!")
+        else:
+            print("Parabéns JOGADOR 2 por vencer o Mega Jogo da Velha!!")
+        return
+
 
 class Tabuleiro:
     """
@@ -350,6 +364,14 @@ class MacroTabuleiro(Tabuleiro):
         Tabuleiro.__init__(self)
         self.ehMacro = True
     
+    def marcaVitoria(self, qualMicroTabuleiro, jogador):
+        '''(MacroTabuleiro, tuple) --> None
+        Esse método marco no macro-tabuleiro quando algum micro-tabuleiro foi vencido
+        '''
+        linha, coluna = qualMicroTabuleiro
+        self.configuracaoDoTabuleiro[linha][coluna] = jogador.simboloDoJogador
+        
+        
 
 class Jogador:
     '''
@@ -386,7 +408,7 @@ class Jogador:
             del microTabuleiro.posicoesVazias[indiceDaPosicao]
         else:
             print("\nJogada inválida!")
-            Usuario.jogadaDaVez(jogador_um, jogador_dois)
+            Usuario.jogadaDaVez(jogador_um, jogador_dois, macroTabuleiro)
             return
         # Se o jogador não for do tipo Humano, imprimir na saída de dados a jogada que foi feita
         if self.tipoDeJogador == "humano":
@@ -434,6 +456,9 @@ class JogadorHumano(Jogador):
                 qualColunaDoMacro = int(qualColunaDoMacro)
                 escolheu_coluna = True
         qualMicroTabuleiro = qualLinhaDoMacro, qualColunaDoMacro
+        if qualMicroTabuleiro not in self.microTabuleirosDisponiveis:
+            print(f'O MicroTabuleiro[{qualLinhaDoMacro}][{qualColunaDoMacro}] está inativo porque algum jogador já ganhou nele.')
+            self.escolheMicroTabuleiro()
         return qualMicroTabuleiro
     
     
@@ -578,14 +603,12 @@ def main():
     usuario.criaArrayDeTabuleiros(listaDeMicroTabuleiros)
     
     # Enquanto ninguém vencer o macro-tabuleiro ou não tiver mais jogadas possíveis, não sai do loop
-    while not macro_tabuleiro.tabuleiroAcabou or len(macro_tabuleiro.posicoesVazias) > 0:
+    while not macro_tabuleiro.tabuleiroAcabou and len(macro_tabuleiro.posicoesVazias) > 0:
         usuario.menuDeOpcoes(macro_tabuleiro, jogador_um)
-        usuario.jogadaDaVez(jogador_um, jogador_dois)
-      
+        usuario.jogadaDaVez(jogador_um, jogador_dois, macro_tabuleiro)
+        #verificaMacroTabuleiro()
 
-
-'''
 # Para chamar a função main automaticamente
 if __name__ == '__main__':
     main()
-'''
+
