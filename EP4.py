@@ -24,19 +24,21 @@ class Usuario():
         # Variáveis que serão retornadas no final
         escolha_do_jogador_um = escolha_do_jogador_dois = None
         # Lista com as possíveis escolhas que um usuário pode fazer
-        possiveis_escolhas = [1,2,3]  
+        possiveis_escolhas = ["1","2","3"]  
         # enquanto o usuário não escolher os jogadores, não sai do loop
         while not escolheu_jogadores:
             # escolhe o jogador 1
             while escolha_do_jogador_um not in possiveis_escolhas:
-                escolha_do_jogador_um = int(input("Escolha o tipo do Jogador 1 (X): "))
+                escolha_do_jogador_um = input("Escolha o tipo do Jogador 1 (X): ")
                 if escolha_do_jogador_um not in possiveis_escolhas:
                     print("Comando inválido!")
+            escolha_do_jogador_um = int(escolha_do_jogador_um)
             # escolhe o jogador 2
             while escolha_do_jogador_dois not in possiveis_escolhas:        
-                escolha_do_jogador_dois = int(input("Escolha o tipo do Jogador 2 (O): "))
+                escolha_do_jogador_dois = input("Escolha o tipo do Jogador 2 (O): ")
                 if escolha_do_jogador_dois not in possiveis_escolhas:
                     print("Comando inválido!")
+            escolha_do_jogador_dois = int(escolha_do_jogador_dois)
             escolheu_jogadores = True
         return escolha_do_jogador_um, escolha_do_jogador_dois
     
@@ -76,7 +78,14 @@ class Usuario():
                 else:
                     print("\nJogada inválida!")
                     self.jogadaDaVez(jogador_um, jogador_dois)
-                    return            
+                    return       
+            # Faz verificações no micro-tabuleiro jgoado recentemente
+            if microTabuleiro.verificaSeGanhouTabuleiro(qualPosicao, jogador_um):
+                microTabuleiro.posicoesVazias = []
+                indice = jogador_um.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
+                # Retira esse micro-tabuleiro da lista dos disponíveis
+                del jogador_um.microTabuleirosDisponiveis[indice]
+                
         # Se for a vez do jogador_dois
         else:
             print("\n ----- Vez do Jogador 2 ----- ")
@@ -95,6 +104,13 @@ class Usuario():
                     print("\nJogada inválida!")
                     self.jogadaDaVez(jogador_um, jogador_dois)
                     return
+            # Faz verificações no micro-tabuleiro jgoado recentemente
+            if microTabuleiro.verificaSeGanhouTabuleiro(qualPosicao, jogador_dois):
+                microTabuleiro.posicoesVazias = []
+                indice = jogador_dois.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
+                # Retira esse micro-tabuleiro da lista dos disponíveis
+                del jogador_dois.microTabuleirosDisponiveis[indice]
+                
         # Troca a vez
         jogador_um.vezDeJogar = not jogador_um.vezDeJogar
         jogador_dois.vezDeJogar = not jogador_dois.vezDeJogar
@@ -104,8 +120,27 @@ class Usuario():
         '''(MicroTabuleiro, tuple, Usuario) --> None
         Esse método chama o método 'imprimirTabuleiro' para um dado micro-tabuleiro.
         '''
-        qualLinha = int(input("Por favor informe a linha onde está o micro-tabuleiro que você quer imprimir: "))
-        qualColuna = int(input("Por favor informe a coluna onde está o micro-tabuleiro que você quer imprimir: "))
+        # Lista que armazenas as escolhas válidas e possíveis
+        possiveis_escolhas = ["0","1","2"]
+        escolheu_linha = False
+        escolheu_coluna = False
+        # Enquanto não escolher a linhas
+        while not escolheu_linha:
+            qualLinha = input("Por favor informe a linha onde está o micro-tabuleiro que você quer imprimir: ")
+            if qualLinha not in possiveis_escolhas:
+                print("Comando inválido!")
+            else:
+                qualLinha = int(qualLinha)
+                escolheu_linha = True
+        # Enquanto não escolher a coluna
+        while not escolheu_coluna:
+            qualColuna = input("Por favor informe a coluna onde está o micro-tabuleiro que você quer imprimir: ")
+            if qualColuna not in possiveis_escolhas:
+                print("Comando inválido!")
+            else:
+                qualColuna = int(qualColuna)
+                escolheu_coluna = True
+        qualLinha, qualColuna = int(qualLinha), int(qualColuna)
         qualMicro = qualLinha, qualColuna
         print(self.arrayDeTabuleiros[(qualMicro)].imprimirTabuleiro())
         return
@@ -119,18 +154,27 @@ class Usuario():
         print("\nEscolha uma opção escrevendo o número correspondente: ")
         escolhaDoJogador = None
         while not escolhaDoJogador == 1:
-            escolhaDoJogador = int(input("1) Prosseguir para a jogada\n2) Imprimir macro-tabuleiro\n3) Mostrar micro-tabuleiros disponíveis\n4) Imprimir algum micro-tabuleiro\nO que você gostaria de fazer? "))
-            if escolhaDoJogador == 1:   # prosseguir com o jogo
+            escolhaDoJogador = input("1) Prosseguir para a jogada\n2) Imprimir macro-tabuleiro\n3) Mostrar micro-tabuleiros disponíveis\n4) Imprimir algum micro-tabuleiro\nO que você gostaria de fazer? ")
+            if escolhaDoJogador == "1":   # prosseguir com o jogo
                 return
-            elif escolhaDoJogador == 2: # imprimir macro-tabuleiro
+            elif escolhaDoJogador == "2": # imprimir macro-tabuleiro
                 strDoMacro = MacroTabuleiro.imprimirTabuleiro()
                 print(strDoMacro)
-            elif escolhaDoJogador == 3: # mostrar micro-tabuleiros disponíiveis
+            elif escolhaDoJogador == "3": # mostrar micro-tabuleiros disponíiveis
                 print(f'\n Os micro-tabuleiros disponíveis são:\n {jogador_um.microTabuleirosDisponiveis}')
-            else:                       # imprimir algum micro-tabuleiro
+            elif escolhaDoJogador == "4": # imprimir algum micro-tabuleiro
                 self.mandaImprimir()
+            else:
+                print("\nComando inválido!")
+                self.menuDeOpcoes(MacroTabuleiro, jogador_um)
+                return
         return            
 
+    
+    def verificaMicroTabuleiro(self, microTabuleiro, qualPosicao):
+        '''(Usuario, MicroTabuleiro) --> None
+        Esse método verifica se
+        '''
 
 class Tabuleiro:
     """
@@ -175,9 +219,9 @@ class Tabuleiro:
         False caso contrário.
         '''
         # Armazena os valores que estão na diagonal principal do tabuleiro
-        valoresDiagonalPrincipal = [self.__configuracaoDoTabuleiro[0][0],
-                                    self.__configuracaoDoTabuleiro[1][1],
-                                    self.__configuracaoDoTabuleiro[2][2]]
+        valoresDiagonalPrincipal = [self.configuracaoDoTabuleiro[0][0],
+                                    self.configuracaoDoTabuleiro[1][1],
+                                    self.configuracaoDoTabuleiro[2][2]]
         # Percorre toda a lista valoresDiagonalPrincipal
         for i in range(3):
             # Caso haja um valor diferente do simbolo do jogador,
@@ -194,9 +238,9 @@ class Tabuleiro:
         False caso contrário.
         '''
         #Armazena os valores que estão na diagonal secundária do tabuleiro.
-        valoresDiagonalSecundaria = [self.__configuracaoDoTabuleiro[0][2],
-                                     self.__configuracaoDoTabuleiro[1][1],
-                                     self.__configuracaoDoTabuleiro[2][0]]
+        valoresDiagonalSecundaria = [self.configuracaoDoTabuleiro[0][2],
+                                     self.configuracaoDoTabuleiro[1][1],
+                                     self.configuracaoDoTabuleiro[2][0]]
         # Percorre toda a lista valoresDiagonalSecundaria
         for i in range(3):
             # Caso haja um valor diferente do simbolo do jogador,
@@ -244,20 +288,21 @@ class Tabuleiro:
         # Se percorrer toda a lista e não tiver nenhum valor diferente, retorna True
         return True
     
-    def verificaSeGanhouTabuleiro(self, qualPosicao, jogadorDaVez, outroJogador):
-        '''(Tabuleiro, tuple, Jogador, Jogador) --> None
+    def verificaSeGanhouTabuleiro(self, qualPosicao, jogador):
+        '''(Tabuleiro, tuple, Jogador) --> bool
         Verifica se algum dos dois jogadores ganhou o Tabuleiro em questão.
         '''
-        diagonalPrincipal = self.verificaDiagonalPrincipal(jogadorDaVez.simboloDoJogador)
-        diagonalSecundaria = self.verificaDiagonalSecundaria(jogadorDaVez.simboloDoJogador)
-        linha = self.verificaLinha(qualPosicao[0], jogadorDaVez.simboloDoJogador)
-        coluna = self.verificaColuna(qualPosicao[1], jogadorDaVez.simboloDoJogador)
+        diagonalPrincipal = self.verificaDiagonalPrincipal(jogador.simboloDoJogador)
+        diagonalSecundaria = self.verificaDiagonalSecundaria(jogador.simboloDoJogador)
+        linha = self.verificaLinha(qualPosicao[0], jogador.simboloDoJogador)
+        coluna = self.verificaColuna(qualPosicao[1], jogador.simboloDoJogador)
         # Se alguém tiver ganhado o tabuleiro de alguma forma
         if diagonalPrincipal or diagonalSecundaria or linha or coluna:
             # Se for macro-tabuleiro:
             if self.ehMacro:
                 self.tabuleiroAcabou = True           
             return True
+        return False
             
 
 class MicroTabuleiro(Tabuleiro):
@@ -371,18 +416,22 @@ class JogadorHumano(Jogador):
         '''
         escolheu_linha = False
         escolheu_coluna = False
+        # Lista que armazenas as escolhas válidas e possíveis
+        possiveis_escolhas = ["0","1","2"]
         # Determina em qual micro-tabuleiro a jogada será feita
         while not escolheu_linha:
-            qualLinhaDoMacro = int(input("Digite qual linha do macro-tabuleiro você quer jogar: "))
-            if qualLinhaDoMacro < 0 or qualLinhaDoMacro > 2:
+            qualLinhaDoMacro = input("Digite qual linha do macro-tabuleiro você quer jogar: ")           
+            if qualLinhaDoMacro not in possiveis_escolhas:
                 print("Valor inválido!")
             else:
+                qualLinhaDoMacro = int(qualLinhaDoMacro)
                 escolheu_linha = True
         while not escolheu_coluna:
-            qualColunaDoMacro = int(input("Digite qual coluna do macro-tabuleiro você quer jogar: "))
-            if qualColunaDoMacro < 0 or qualColunaDoMacro > 2:
+            qualColunaDoMacro = input("Digite qual coluna do macro-tabuleiro você quer jogar: ")
+            if qualColunaDoMacro not in possiveis_escolhas:
                 print("Valor inválido!")
             else:
+                qualColunaDoMacro = int(qualColunaDoMacro)
                 escolheu_coluna = True
         qualMicroTabuleiro = qualLinhaDoMacro, qualColunaDoMacro
         return qualMicroTabuleiro
@@ -394,18 +443,22 @@ class JogadorHumano(Jogador):
         '''
         escolheu_linha = False
         escolheu_coluna = False
+        # Lista que armazenas as escolhas válidas e possíveis
+        possiveis_escolhas = ["0","1","2"]
         # Determina em qual posição do micro-tabuleiro a jogada será feita
         while not escolheu_linha:
-            qualLinha = int(input("Digite qual linha do micro-tabuleiro você quer jogar: "))
-            if qualLinha < 0 or qualLinha > 2:
+            qualLinha = input("Digite qual linha do micro-tabuleiro você quer jogar: ")
+            if qualLinha not in possiveis_escolhas:
                 print("Valor inválido!")
             else:
+                qualLinha = int(qualLinha)
                 escolheu_linha = True
         while not escolheu_coluna:
-            qualColuna = int(input("Digite qual coluna do micro-tabuleiro você quer jogar: "))
-            if qualColuna < 0 or qualColuna > 2:
+            qualColuna = input("Digite qual coluna do micro-tabuleiro você quer jogar: ")
+            if qualColuna not in possiveis_escolhas:
                 print("Valor inválido!")
             else:
+                qualColuna = int(qualColuna)
                 escolheu_coluna = True
         qualPosicao = qualLinha, qualColuna
         return qualPosicao
