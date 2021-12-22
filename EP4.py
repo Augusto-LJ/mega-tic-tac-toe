@@ -60,6 +60,7 @@ class Usuario():
         '''(Usuario, Jogador, Jogador) --> None
         Esse método faz o jogador da vez realizar sua jogada
         '''
+        indice = None
         # Se for a vez do jogador_um
         if jogador_um.vezDeJogar:
             print("\n ----- Vez do Jogador 1 ----- ")
@@ -67,8 +68,6 @@ class Usuario():
             # Apelido para o micro-tabuleiro
             microTabuleiro = self.arrayDeTabuleiros[qualMicroTabuleiro]
             if jogador_um.tipoDeJogador == "estabanado" or jogador_um.tipoDeJogador == "comecru":
-                #if jogador_um.microTabuleirosDisponiveis == []:
-                 #   
                 qualPosicao = jogador_um.escolhePosicaoNoMicro(microTabuleiro)
                 jogador_um.fazJogada(self, microTabuleiro, qualPosicao, qualMicroTabuleiro)
 
@@ -82,9 +81,14 @@ class Usuario():
                     self.jogadaDaVez(jogador_um, jogador_dois, macroTabuleiro)
                     return       
             # Faz verificações no micro-tabuleiro jogado recentemente
+            if len(microTabuleiro.posicoesVazias) == 0:
+                indice = jogador_um.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
+                # Retira esse micro-tabuleiro da lista dos disponíveis
+                del jogador_dois.microTabuleirosDisponiveis[indice]
             if microTabuleiro.verificaSeGanhouTabuleiro(qualPosicao, jogador_um):
                 microTabuleiro.posicoesVazias = []
-                indice = jogador_um.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
+                if not type(indice) == tuple:
+                    indice = jogador_um.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
                 # Retira esse micro-tabuleiro da lista dos disponíveis
                 del jogador_um.microTabuleirosDisponiveis[indice]
                 # Marca no macro-tabuleiro
@@ -110,6 +114,10 @@ class Usuario():
                     self.jogadaDaVez(jogador_um, jogador_dois, macroTabuleiro)
                     return
             # Faz verificações no micro-tabuleiro jogado recentemente
+            if len(microTabuleiro.posicoesVazias) == 0:
+                indice = jogador_dois.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
+                # Retira esse micro-tabuleiro da lista dos disponíveis
+                del jogador_dois.microTabuleirosDisponiveis[indice]
             if microTabuleiro.verificaSeGanhouTabuleiro(qualPosicao, jogador_dois):
                 microTabuleiro.posicoesVazias = []
                 indice = jogador_dois.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
@@ -390,12 +398,6 @@ class Jogador:
         self.vezDeJogar = False
         self.microTabuleirosDisponiveis = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
         
-        
-    def quaisTabuleirosDisponiveis(self):
-        '''(Jogador) --> list
-        Esse método retorna a lista dos tabuleiros que ainda estão disponíveis.
-        '''
-        return self.tabuleirosDisponiveis
     
     def fazJogada(self, Usuario, microTabuleiro, qualPosicao, qualMicroTabuleiro):
         '''(Jogador, Usuario, MicroTabuleiro, tuple, tuple) --> None
@@ -532,7 +534,6 @@ class JogadorEstabanado(Jogador):
         '''
         # Define a jogada aleatoriamente
         qualPosicao = random.choice(microTabuleiro.posicoesVazias)
-
         return qualPosicao
     
     
@@ -607,10 +608,9 @@ def main():
     usuario.criaArrayDeTabuleiros(listaDeMicroTabuleiros)
     
     # Enquanto ninguém vencer o macro-tabuleiro ou não tiver mais jogadas possíveis, não sai do loop
-    while not macro_tabuleiro.tabuleiroAcabou and len(macro_tabuleiro.posicoesVazias) > 0:
+    while not macro_tabuleiro.tabuleiroAcabou and len(macro_tabuleiro.posicoesVazias) > 0 and len(jogador_um.microTabuleirosDisponiveis) > 0:
         usuario.menuDeOpcoes(macro_tabuleiro, jogador_um)
         usuario.jogadaDaVez(jogador_um, jogador_dois, macro_tabuleiro)
-        print(macro_tabuleiro.posicoesVazias)
     
     if not macro_tabuleiro.tabuleiroAcabou:
         print("Deu velha! Ninguém ganhou :(")
