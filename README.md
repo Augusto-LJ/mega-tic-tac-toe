@@ -45,4 +45,4 @@ git           | 2.23.0
 - Não há mais espaços livres no macro-tabuleiro e nenhum dos jogadores venceu (popularmente falando, 'deu zebra').
 
 ## Como rodar o programa:
-Baixe o arquivo 'EP4.py' e execute-o em seu ambiente de programação de preferência. Todo o texto aparecerá na saída de dados.
+Baixe o arquivo 'EP4.py' e execute-o em seu ambiente de programação de preferência. Os desenvolvedores do projeto utilizaram o Spyder. Todo o texto aparecerá na saída de dados, então o usuário precisará digitar os comandos no terminal, como foi explicado anteriormente.
