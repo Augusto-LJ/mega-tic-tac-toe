@@ -67,6 +67,8 @@ class Usuario():
             # Apelido para o micro-tabuleiro
             microTabuleiro = self.arrayDeTabuleiros[qualMicroTabuleiro]
             if jogador_um.tipoDeJogador == "estabanado" or jogador_um.tipoDeJogador == "comecru":
+                #if jogador_um.microTabuleirosDisponiveis == []:
+                 #   
                 qualPosicao = jogador_um.escolhePosicaoNoMicro(microTabuleiro)
                 jogador_um.fazJogada(self, microTabuleiro, qualPosicao, qualMicroTabuleiro)
 
@@ -339,7 +341,7 @@ class MicroTabuleiro(Tabuleiro):
         self.ehMacro = False
         
         
-    def reiniciaMicroTabuleiro(self):
+    def reiniciaMicroTabuleiro(self, jogador):
         '''(MicroTabuleiro) --> none
         Esse método 'limpa' todas as posições de um micro-tabuleiro que gerou empate
         '''
@@ -370,7 +372,10 @@ class MacroTabuleiro(Tabuleiro):
         '''
         linha, coluna = qualMicroTabuleiro
         self.configuracaoDoTabuleiro[linha][coluna] = jogador.simboloDoJogador
-        
+        # Deleta a posição marcada da lista das posições vazias do macro-tabuleiro
+        indice = self.posicoesVazias.index((qualMicroTabuleiro))
+        del self.posicoesVazias[indice]
+        return
         
 
 class Jogador:
@@ -527,7 +532,7 @@ class JogadorEstabanado(Jogador):
         '''
         # Define a jogada aleatoriamente
         qualPosicao = random.choice(microTabuleiro.posicoesVazias)
-        indiceDaJogada = microTabuleiro.posicoesVazias.index(qualPosicao)
+
         return qualPosicao
     
     
@@ -559,7 +564,6 @@ class JogadorComeCru(Jogador):
         '''
         # Define a posição no micro-tabuleiro onde a jogada será feita
         qualPosicao = microTabuleiro.posicoesVazias[0]
-        indiceDaJogada = microTabuleiro.posicoesVazias.index(qualPosicao)
         return qualPosicao
        
 def transformaEmClone(jogador_um, jogador_dois):
@@ -606,7 +610,10 @@ def main():
     while not macro_tabuleiro.tabuleiroAcabou and len(macro_tabuleiro.posicoesVazias) > 0:
         usuario.menuDeOpcoes(macro_tabuleiro, jogador_um)
         usuario.jogadaDaVez(jogador_um, jogador_dois, macro_tabuleiro)
-        #verificaMacroTabuleiro()
+        print(macro_tabuleiro.posicoesVazias)
+    
+    if not macro_tabuleiro.tabuleiroAcabou:
+        print("Deu velha! Ninguém ganhou :(")
 
 # Para chamar a função main automaticamente
 if __name__ == '__main__':
