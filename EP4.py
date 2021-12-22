@@ -349,18 +349,7 @@ class MicroTabuleiro(Tabuleiro):
         self.pos_col = pos_coluna
         # para saber se é micro ou macro
         self.ehMacro = False
-        
-        
-    def reiniciaMicroTabuleiro(self, jogador):
-        '''(MicroTabuleiro) --> none
-        Esse método 'limpa' todas as posições de um micro-tabuleiro que gerou empate
-        '''
-        # Laço duplo para percorrer todas as linhas e colunas de um micro-tabuleiro
-        for linha in range(3):
-            for coluna in range(3):
-                self.configuracaoDoTabuleiro[linha][coluna] = " "
-        # Atualiza a lista de posições vazias desse micro-tabuleiro
-        self.posicoesVazias = [(0,0),(0,1),(0,2),(1,0),(1,1),(1,2),(2,0),(2,1),(2,2)]
+
         
         
 class MacroTabuleiro(Tabuleiro):
@@ -620,4 +609,3 @@ def main():
 # Para chamar a função main automaticamente
 if __name__ == '__main__':
     main()
-
