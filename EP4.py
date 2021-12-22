@@ -60,7 +60,7 @@ class Usuario():
         '''(Usuario, Jogador, Jogador) --> None
         Esse método faz o jogador da vez realizar sua jogada
         '''
-        indice = None
+        jaFoiRetirado = False
         # Se for a vez do jogador_um
         if jogador_um.vezDeJogar:
             print("\n ----- Vez do Jogador 1 ----- ")
@@ -85,12 +85,13 @@ class Usuario():
                 indice = jogador_um.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
                 # Retira esse micro-tabuleiro da lista dos disponíveis
                 del jogador_dois.microTabuleirosDisponiveis[indice]
+                jaFoiRetirado = True
             if microTabuleiro.verificaSeGanhouTabuleiro(qualPosicao, jogador_um):
-                microTabuleiro.posicoesVazias = []
-                if not type(indice) == tuple:
+                if not jaFoiRetirado:
                     indice = jogador_um.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
-                # Retira esse micro-tabuleiro da lista dos disponíveis
-                del jogador_um.microTabuleirosDisponiveis[indice]
+                    # Retira esse micro-tabuleiro da lista dos disponíveis
+                    del jogador_um.microTabuleirosDisponiveis[indice]     
+                microTabuleiro.posicoesVazias = []
                 # Marca no macro-tabuleiro
                 macroTabuleiro.marcaVitoria(qualMicroTabuleiro, jogador_um)
                 if macroTabuleiro.verificaSeGanhouTabuleiro(qualMicroTabuleiro, jogador_um):
@@ -118,16 +119,17 @@ class Usuario():
                 indice = jogador_dois.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
                 # Retira esse micro-tabuleiro da lista dos disponíveis
                 del jogador_dois.microTabuleirosDisponiveis[indice]
+                jaFoiRetirado = True
             if microTabuleiro.verificaSeGanhouTabuleiro(qualPosicao, jogador_dois):
+                if not jaFoiRetirado:
+                    indice = jogador_um.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
+                    # Retira esse micro-tabuleiro da lista dos disponíveis
+                    del jogador_dois.microTabuleirosDisponiveis[indice]
                 microTabuleiro.posicoesVazias = []
-                indice = jogador_dois.microTabuleirosDisponiveis.index(qualMicroTabuleiro)
-                # Retira esse micro-tabuleiro da lista dos disponíveis
-                del jogador_dois.microTabuleirosDisponiveis[indice]
                 # Marca no macro-tabuleiro
                 macroTabuleiro.marcaVitoria(qualMicroTabuleiro, jogador_dois)
                 if macroTabuleiro.verificaSeGanhouTabuleiro(qualMicroTabuleiro, jogador_dois):
-                    self.venceuJogo(jogador_dois, macroTabuleiro)
-                
+                    self.venceuJogo(jogador_dois, macroTabuleiro)        
         # Troca a vez
         jogador_um.vezDeJogar = not jogador_um.vezDeJogar
         jogador_dois.vezDeJogar = not jogador_dois.vezDeJogar
