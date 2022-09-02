@@ -2,7 +2,7 @@
 Este projeto foi requerido pelo professor Fabio Kon na disciplina 'MAC0216 - Técnicas de Programação I' na Universidade de São Paulo (USP). 
 O objetivo é fazer um 'Mega Jogo-da-velha' usando programação orientada a objetos (POO).
 
-> Status: Finalizado!
+> Status: Desenvolvimento do jogo finalizado, testes incompletos
 
 ## Desenvolvedores:
 - Nome: Alxélio Ribeiro Esteves - NUSP: 11796980
