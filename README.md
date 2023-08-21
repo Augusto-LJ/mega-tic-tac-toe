@@ -18,7 +18,7 @@ pytest        | 6.2.5
 git           | 2.23.0
 
 ## Descrição:
-&nbsp;&nbsp;O trabalho consiste em uma implementação orientada a objetos em Python do **Ultimate Tic-Tac-Toe** (https://en.wikipedia.org/wiki/Tic-tac-toe_variants).  A ideia é que um macro-tabuleiro é composto por 9 micro-tabuleiros de jogo da velha dispostos no formato de um grande jogo da velha (3x3). Os jogadores podem escolher jogar em qualquer lugar do macro-tabuleiro, uma jogada por vez, de forma alternada e desde que a jogada for válida (ou seja, se o lugar estiver 'vazio'). Quando um jogador ganha um dos micro-tabuleiros, este é marcado inteiro como pertencente ao jogador que o venceu. Ganha o jogo quem ganhar o jogo da velha no macro-tabuleiro.<br></br>
+&nbsp;&nbsp;O trabalho consiste em uma implementação orientada a objetos em Python do <a href="https://en.wikipedia.org/wiki/Tic-tac-toe_variants" target="_blank">Ultimate Tic-Tac-Toe</a>. A ideia é que um macro-tabuleiro é composto por 9 micro-tabuleiros de jogo da velha dispostos no formato de um grande jogo da velha (3x3). Os jogadores podem escolher jogar em qualquer lugar do macro-tabuleiro, uma jogada por vez, de forma alternada e desde que a jogada for válida (ou seja, se o lugar estiver 'vazio'). Quando um jogador ganha um dos micro-tabuleiros, este é marcado inteiro como pertencente ao jogador que o venceu. Ganha o jogo quem ganhar o jogo da velha no macro-tabuleiro.<br></br>
 
 #### Foram implementados os seguintes jogadores:
 1) Jogador humano: digita as jogadas no teclado do computador;
